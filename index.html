@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Ramp-up breakeven planner for sewing lines — Snowcoast Vietnam Co. Ltd.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ramp-up Breakeven Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: graphics-desk money tool, plain and exact for a factory IE.
+   IDEA: a line's daily production board — efficiency climbing toward the breakeven bar.
+   PICTURE: live chart: daily efficiency bars vs dashed breakeven line, cumulative P/L under it.
+   COLOUR and TYPE: sky field #4fb3e8, ink #10223a, orange #ff7a1a for loss; Outfit + Inter.
+   LAYOUT: sky band with verdict + key figures; inputs beside the big chart; daily table below. */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0b1726);--ink:light-dark(#10223a,#e8f1f8);--mut:light-dark(#53657a,#93a6bb);--line:light-dark(#dbe6ef,#1f3550);--card:light-dark(#f3f8fc,#112238);--sky:#4fb3e8;--skyd:light-dark(#1f7fb8,#4fb3e8);--org:#ff7a1a;--grn:light-dark(#1f7fb8,#4fb3e8)}
+:root{--hf:Outfit,Inter,sans-serif}
+html:is([lang=vi],[lang=ko],[lang=zh]){--hf:Inter,"Noto Sans KR","Noto Sans SC","PingFang SC","Malgun Gothic",system-ui,sans-serif}
+.exp{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px}.exp button{background:#10223a;color:#fff}.exp .st{font-size:14px;font-weight:500}
+.sty{font-weight:600}
+.fac{font:600 clamp(17px,2vw,20px)/1.2 var(--hf);margin:0 0 4px;color:#10223a}
+.toprow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;margin-bottom:6px}.toprow .lab{margin:0}
+#lang{width:auto;min-width:150px;text-align:left;background:rgba(255,255,255,.7);color:#10223a;border-color:rgba(16,34,58,.25);font-weight:500}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px)}
+.top{background:var(--sky);color:#10223a}
+.wrap{max-width:1240px;margin:0 auto}
+.lab{font-size:14px;font-weight:500;opacity:.8;margin:0 0 6px}
+h1{font:600 clamp(28px,4.4vw,48px)/1.08 var(--hf);margin:0 0 22px;text-wrap:balance}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.k{background:rgba(255,255,255,.55);border-radius:12px;padding:12px 14px}
+.k{overflow:hidden}
+.k b{display:block;font:600 clamp(20px,2.3vw,28px)/1.15 var(--hf);overflow-wrap:anywhere;margin-bottom:4px}
+.k span{display:block;line-height:1.35}
+.k span{font-size:13px}
+.k.bad b{color:#c2410c}
+.k.hi{background:#10223a;color:#fff}.k.hi b{color:#fff}
+.main{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:28px}
+form{display:grid;gap:14px;align-content:start}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px 14px 14px;margin:0;display:grid;gap:10px}
+legend{font:600 15px var(--hf);padding:0 6px}
+label{display:grid;grid-template-columns:minmax(0,1fr) 116px;align-items:center;gap:8px;font-size:14px}
+label.full{grid-template-columns:1fr}
+input,select{font:16px Inter,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-height:44px;width:100%;text-align:right}
+input[type=text]{text-align:left}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--org);outline-offset:1px}
+.hint{font-size:13px;color:var(--mut);margin:0}
+button{font:600 15px Inter,sans-serif;min-height:44px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);padding:0 16px;cursor:pointer}
+button.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.fig{position:relative;min-height:420px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin:0 0 8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.note{font-size:14px;color:var(--mut);margin:12px 0 0}
+.solve{background:var(--card);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:15px}
+.solve b{font-family:var(--hf);font-size:18px}
+h2{font:600 24px/1.2 var(--hf);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-weight:600;color:var(--mut);position:sticky;top:0;background:var(--bg)}
+td.neg{color:#d9480f}tr.be td{background:color-mix(in srgb,var(--sky) 18%,transparent)}
+.scroll{overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid var(--line);border-radius:12px}
+.how{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;gap:10px;max-width:900px}
+.how li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;background:var(--card);border-radius:12px;padding:12px 14px}
+.how li::before{content:counter(s);grid-row:span 3;width:30px;height:30px;border-radius:50%;background:var(--sky);color:#10223a;font:600 15px/30px var(--hf);text-align:center}
+.how b{font-family:var(--hf);font-size:16px}
+.how .f{font-size:15px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.how .f strong{color:var(--skyd);white-space:nowrap}
+.how .w{font-size:14px;color:var(--mut)}
+.how li.res{background:var(--ink);color:var(--bg)}.how li.res .w{color:inherit;opacity:.8}.how li.res .f strong{color:var(--sky)}
+.formula{font:600 16px/1.5 var(--hf);background:var(--card);border-left:4px solid var(--org);border-radius:8px;padding:12px 16px;margin:0 0 16px;max-width:900px}
+@media(max-width:820px){.main{grid-template-columns:1fr}.fig{min-height:360px}}
+@media(prefers-reduced-motion:no-preference){.k b{transition:color .3s}}
+</style>
+</head>
+<body>
+<section class="band top"><div class="wrap">
+  <div class="toprow">
+    <div><p class="fac">Snowcoast Vietnam Co. Ltd.</p><p class="lab"><span data-i="title">Ramp-up breakeven planner · sewing line</span><span class="sty" id="styTop"></span></p></div>
+    <select id="lang" aria-label="Language">
+      <option value="en">English</option>
+      <option value="vi">Tiếng Việt</option>
+      <option value="ko">한국어</option>
+      <option value="zh">中文</option>
+    </select>
+  </div>
+  <h1 id="verdict" data-i="calc">Calculating…</h1>
+  <div class="kpis" id="kpis"></div>
+  <div class="exp" id="exp"><button type="button" id="xh" data-i="xh">Download report (HTML)</button><button type="button" id="xc" data-i="xc">Download data (CSV)</button><span class="st" id="xs" role="status"></span></div>
+</div></section>
+
+<section class="band"><div class="wrap main">
+  <form id="f" autocomplete="off">
+    <fieldset><legend data-i="g1">Order and line</legend>
+      <label><span data-i="sty">Style No.</span><input id="sty" type="text" maxlength="40" value="" placeholder="—"></label>
+      <label><span data-i="qty">Order quantity (pcs)</span><input id="qty" type="number" min="1" value="10000"></label>
+      <label><span data-i="smv">SMV (min/pc)</span><input id="smv" type="number" step="0.01" min="0.01" value="60"></label>
+      <label><span data-i="wk">Workers on line</span><input id="wk" type="number" min="1" value="40"></label>
+      <label><span data-i="hr">Working hours/day</span><input id="hr" type="number" step="0.5" min="0.5" value="10"></label>
+    </fieldset>
+    <fieldset><legend data-i="g2">Money</legend>
+      <label><span data-i="cw">Cost per worker (USD)</span><input id="cw" type="number" step="0.01" min="0" value="50"></label>
+      <label><span data-i="cb">Cost basis</span><select id="cb"><option value="day" data-i="perday">per day</option><option value="month" data-i="permonth">per month</option></select></label>
+      <label id="mdl" hidden><span data-i="md">Working days/month</span><input id="md" type="number" min="1" value="26"></label>
+      <label><span data-i="sh">Cost based on (hrs/day)</span><input id="sh" type="number" step="0.5" min="0.5" value="9.5"></label>
+      <label><span data-i="ot">OT pay rate (%)</span><input id="ot" type="number" step="5" min="0" value="100"></label>
+      <p class="hint" id="cdh"></p>
+      <label><span data-i="cm">CM price (USD/pc)</span><input id="cm" type="number" step="0.01" min="0" value="8"></label>
+      <p class="hint" data-i="cmh">CM price is a sample value — enter your quoted CM per piece.</p>
+    </fieldset>
+    <fieldset><legend data-i="g3">Ramp-up curve</legend>
+      <label><span data-i="e0">Day 1 efficiency (%)</span><input id="e0" type="number" min="0" value="30"></label>
+      <label><span data-i="st">Daily increase (%)</span><input id="st" type="number" step="0.5" min="0" value="8"></label>
+      <label><span data-i="tg">Target efficiency (%)</span><input id="tg" type="number" min="1" value="70"></label>
+      <label class="full"><span data-i="cu">Custom daily efficiency % (optional, comma-separated, overrides above; holds at target after)</span>
+        <input id="cu" type="text" placeholder="e.g. 25, 38, 48, 56, 62, 66"></label>
+    </fieldset>
+    <div class="btns"><button type="button" id="auto" data-i="auto">Find minimum target</button><button type="button" class="alt" id="reset" data-i="reset">Reset</button></div>
+  </form>
+
+  <div>
+    <div class="legend"><span><i style="background:var(--org)"></i><span data-i="lg1">Day below breakeven (loss)</span></span><span><i style="background:var(--sky)"></i><span data-i="lg2">Day above breakeven (profit)</span></span><span><i style="background:var(--ink);height:2px;vertical-align:3px"></i><span data-i="lg3">Cumulative P/L</span></span></div>
+    <div class="fig"><svg id="ch" role="img" aria-label="Daily efficiency versus breakeven and cumulative profit"></svg></div>
+    <div class="solve" id="solve"></div>
+    <p class="note" id="basis"></p>
+  </div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <h2 data-i="h2a">How the minimum target is calculated</h2>
+  <p class="formula" data-i="formula">After ramp-up, the line must run high enough to earn back the ramp-up loss before the order ends.</p>
+  <ol class="how" id="how"></ol>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <h2 data-i="h2b">Day-by-day ramp-up plan</h2>
+  <div class="scroll"><table><thead><tr id="thr"></tr></thead><tbody id="tb"></tbody></table></div>
+  <p class="note" data-i="note2">Last day's cost is prorated by the share of the day used, assuming the line moves to the next style. Highlighted row = cumulative breakeven day.</p>
+</div></section>
+
+<script>
+{
+const L10={
+en:{
+ sty:'Style No.',xh:'Download report (HTML)',xc:'Download data (CSV)',xOk:'Saved',xNo:'Download cancelled',xNa:"Export isn't available in this view — open the calculator on claude.ai",rGen:'Report generated',rIn:'Inputs',rPdf:'Open in a browser and use Print → Save as PDF to make a PDF.',
+ title:'Ramp-up breakeven planner · sewing line',calc:'Calculating…',
+ g1:'Order and line',qty:'Order quantity (pcs)',smv:'SMV (min/pc)',wk:'Workers on line',hr:'Working hours/day',
+ g2:'Money',cw:'Cost per worker (USD)',cb:'Cost basis',perday:'per day',permonth:'per month',md:'Working days/month',sh:'Cost based on (hrs/day)',ot:'OT pay rate (%)',cm:'CM price (USD/pc)',cmh:'CM price is a sample value — enter your quoted CM per piece.',
+ g3:'Ramp-up curve',e0:'Day 1 efficiency (%)',st:'Daily increase (%)',tg:'Target efficiency (%)',cu:'Custom daily efficiency % (optional, comma-separated, overrides above; holds at target after)',eg:'e.g.',
+ auto:'Find minimum target',reset:'Reset',lg1:'Day below breakeven (loss)',lg2:'Day above breakeven (profit)',lg3:'Cumulative P/L',
+ h2a:'How the minimum target is calculated',formula:'After ramp-up, the line must run high enough to earn back the ramp-up loss before the order ends.',
+ h2b:'Day-by-day ramp-up plan',th:['Day','Eff %','Output','Cum output','Cost','CM revenue','Daily P/L','Cum P/L'],
+ note2:'Last day\'s cost is prorated by the share of the day used, assuming the line moves to the next style. Highlighted row = cumulative breakeven day.',
+ vNo:'Line cannot finish this order in 400 days — check the ramp-up inputs',
+ vOk:(d,a)=>`Order breaks even on day ${d} and closes ${a} ahead`,
+ vLoss:(a,m)=>`Order loses ${a} — target must reach ${m} to break even`,more300:'more than 300%',
+ kMin:'Minimum target efficiency',kMinNo:'Minimum target (not reachable)',kBe:'Breakeven efficiency',kBeOut:'Breakeven output/day',kCap:'Output at 100%',kDays:'Days to finish order',kRamp:'Loss during ramp-up',kFirst:'First profitable day',kNet:'Order net P/L',
+ pcs:' pcs',days:n=>`${n} days`,dayN:n=>`Day ${n}`,never:'Never',
+ solveNo:'Target efficiency can\'t recover the ramp-up loss on this order — raise the CM price, shorten the ramp-up or move to a larger order.',
+ solveOk:(m,b,x)=>`Minimum target efficiency to break even on the whole order: <b>${m}</b>. Daily breakeven alone needs ${b}; the extra ${x} pays back the ramp-up loss before the order ends.`,
+ notReach:'Not reachable',nr1:'The line cannot earn back the ramp-up loss on this order. Raise CM, shorten ramp-up or plan a bigger order.',nr2:'CM is too low to cover the ramp-up loss on this order size.',
+ e1t:'Ramp-up loss',e1:(n,q,lose,a)=>`Day 1–${n} make ${q} pcs and ${lose?'lose':'gain'} <strong>${a}</strong>`,e1none:'No ramp-up, so nothing to recover',
+ e2t:'Share it over the pieces left',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} pcs = ${per}/pc → each piece may cost at most ${cm} ${sg} ${per} = <strong>${den}</strong>`,
+ e3t:'Output needed per day',e3:(c,den,o)=>`Daily cost ${c} ÷ ${den} = <strong>${o} pcs/day</strong>`,
+ e4t:'Turn output into efficiency',e4:(o,smv,mn,raw)=>`${o} pcs × ${smv} SMV ÷ ${mn} min = ${raw}`,round:'after rounding to whole pieces',
+ cdh:(hr,base,sh,mid,c)=>`Cost per worker for ${hr} h = ${base} ÷ ${sh} h × ${mid} = <b>${c}/day</b>`,
+ basis:(wk,hr,mn,C,cd,beo,smv)=>`Basis: ${wk} workers × ${hr} h × 60 = ${mn} min/day · daily line cost ${C} (${wk} × ${cd}) · breakeven = cost ÷ CM = ${beo} pcs → × ${smv} SMV ÷ ${mn} min.`,
+ cEff:'Daily efficiency',cCum:'Cumulative P/L (USD)',cBe:'Breakeven',cBeDay:n=>`Breakeven day ${n}`
+},
+vi:{
+ sty:'Mã hàng (Style No.)',xh:'Tải báo cáo (HTML)',xc:'Tải dữ liệu (CSV)',xOk:'Đã lưu',xNo:'Đã hủy tải',xNa:'Không thể xuất trong chế độ xem này — hãy mở trên claude.ai',rGen:'Ngày tạo báo cáo',rIn:'Thông số đầu vào',rPdf:'Mở bằng trình duyệt và chọn In → Lưu dạng PDF để có file PDF.',
+ title:'Kế hoạch tăng năng suất đạt hòa vốn · chuyền may',calc:'Đang tính…',
+ g1:'Đơn hàng và chuyền',qty:'Số lượng đơn hàng (sp)',smv:'SMV (phút/sp)',wk:'Số công nhân trên chuyền',hr:'Giờ làm việc/ngày',
+ g2:'Chi phí và giá CM',cw:'Chi phí mỗi công nhân (USD)',cb:'Cách tính chi phí',perday:'theo ngày',permonth:'theo tháng',md:'Ngày làm việc/tháng',sh:'Chi phí tính theo (giờ/ngày)',ot:'Hệ số lương tăng ca (%)',cm:'Giá CM (USD/sp)',cmh:'Giá CM là giá trị mẫu — hãy nhập giá CM báo giá cho mỗi sản phẩm.',
+ g3:'Đường cong tăng năng suất',e0:'Hiệu suất ngày 1 (%)',st:'Mức tăng mỗi ngày (%)',tg:'Hiệu suất mục tiêu (%)',cu:'Hiệu suất từng ngày tự nhập % (tùy chọn, cách nhau bằng dấu phẩy, thay thế thông số trên; sau đó giữ ở mức mục tiêu)',eg:'VD:',
+ auto:'Tìm mục tiêu tối thiểu',reset:'Đặt lại',lg1:'Ngày dưới hòa vốn (lỗ)',lg2:'Ngày trên hòa vốn (lãi)',lg3:'Lãi/lỗ lũy kế',
+ h2a:'Cách tính hiệu suất mục tiêu tối thiểu',formula:'Sau giai đoạn tăng năng suất, chuyền phải chạy đủ cao để bù lại khoản lỗ trước khi đơn hàng kết thúc.',
+ h2b:'Kế hoạch tăng năng suất theo ngày',th:['Ngày','Hiệu suất %','Sản lượng','SL lũy kế','Chi phí','Doanh thu CM','Lãi/lỗ ngày','Lãi/lỗ lũy kế'],
+ note2:'Chi phí ngày cuối được tính theo tỷ lệ thời gian sử dụng, giả định chuyền chuyển sang mã hàng tiếp theo. Dòng tô màu = ngày hòa vốn lũy kế.',
+ vNo:'Chuyền không thể hoàn thành đơn hàng trong 400 ngày — hãy kiểm tra thông số tăng năng suất',
+ vOk:(d,a)=>`Đơn hàng hòa vốn vào ngày ${d} và lãi ${a}`,
+ vLoss:(a,m)=>`Đơn hàng lỗ ${a} — mục tiêu phải đạt ${m} để hòa vốn`,more300:'trên 300%',
+ kMin:'Hiệu suất mục tiêu tối thiểu',kMinNo:'Mục tiêu tối thiểu (không đạt được)',kBe:'Hiệu suất hòa vốn',kBeOut:'Sản lượng hòa vốn/ngày',kCap:'Sản lượng tại 100%',kDays:'Số ngày hoàn thành đơn',kRamp:'Lỗ giai đoạn tăng năng suất',kFirst:'Ngày đầu tiên có lãi',kNet:'Lãi/lỗ ròng đơn hàng',
+ pcs:' sp',days:n=>`${n} ngày`,dayN:n=>`Ngày ${n}`,never:'Không có',
+ solveNo:'Hiệu suất mục tiêu không thể bù lỗ giai đoạn tăng năng suất của đơn hàng này — hãy tăng giá CM, rút ngắn thời gian tăng năng suất hoặc làm đơn hàng lớn hơn.',
+ solveOk:(m,b,x)=>`Hiệu suất mục tiêu tối thiểu để cả đơn hàng hòa vốn: <b>${m}</b>. Hòa vốn theo ngày chỉ cần ${b}; phần thêm ${x} dùng để bù lỗ giai đoạn tăng năng suất trước khi đơn hàng kết thúc.`,
+ notReach:'Không đạt được',nr1:'Chuyền không thể bù lại khoản lỗ giai đoạn tăng năng suất của đơn hàng này. Hãy tăng CM, rút ngắn thời gian tăng năng suất hoặc làm đơn hàng lớn hơn.',nr2:'Giá CM quá thấp để bù lỗ giai đoạn tăng năng suất với số lượng đơn này.',
+ e1t:'Lỗ giai đoạn tăng năng suất',e1:(n,q,lose,a)=>`Ngày 1–${n} làm ${q} sp và ${lose?'lỗ':'lãi'} <strong>${a}</strong>`,e1none:'Không có giai đoạn tăng năng suất, không cần bù lỗ',
+ e2t:'Chia cho số sản phẩm còn lại',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} sp = ${per}/sp → chi phí mỗi sản phẩm tối đa ${cm} ${sg} ${per} = <strong>${den}</strong>`,
+ e3t:'Sản lượng cần mỗi ngày',e3:(c,den,o)=>`Chi phí ngày ${c} ÷ ${den} = <strong>${o} sp/ngày</strong>`,
+ e4t:'Quy đổi sản lượng thành hiệu suất',e4:(o,smv,mn,raw)=>`${o} sp × ${smv} SMV ÷ ${mn} phút = ${raw}`,round:'sau khi làm tròn thành sản phẩm nguyên',
+ cdh:(hr,base,sh,mid,c)=>`Chi phí mỗi công nhân cho ${hr} giờ = ${base} ÷ ${sh} h × ${mid} = <b>${c}/ngày</b>`,
+ basis:(wk,hr,mn,C,cd,beo,smv)=>`Cơ sở: ${wk} công nhân × ${hr} giờ × 60 = ${mn} phút/ngày · chi phí chuyền/ngày ${C} (${wk} × ${cd}) · hòa vốn = chi phí ÷ CM = ${beo} sp → × ${smv} SMV ÷ ${mn} phút.`,
+ cEff:'Hiệu suất hằng ngày',cCum:'Lãi/lỗ lũy kế (USD)',cBe:'Hòa vốn',cBeDay:n=>`Hòa vốn ngày ${n}`
+},
+ko:{
+ sty:'스타일 번호',xh:'보고서 다운로드 (HTML)',xc:'데이터 다운로드 (CSV)',xOk:'저장됨',xNo:'다운로드 취소됨',xNa:'이 화면에서는 내보내기를 사용할 수 없습니다 — claude.ai에서 여세요',rGen:'보고서 작성일',rIn:'입력값',rPdf:'브라우저에서 열고 인쇄 → PDF로 저장을 선택하면 PDF가 됩니다.',
+ title:'램프업 손익분기 플래너 · 봉제 라인',calc:'계산 중…',
+ g1:'오더 및 라인',qty:'오더 수량 (pcs)',smv:'SMV (분/pc)',wk:'라인 작업자 수',hr:'일 근무시간',
+ g2:'비용 및 단가',cw:'작업자 1인 비용 (USD)',cb:'비용 기준',perday:'일당',permonth:'월급',md:'월 근무일수',sh:'비용 기준 시간 (시간/일)',ot:'잔업 수당률 (%)',cm:'CM 단가 (USD/pc)',cmh:'CM 단가는 예시값입니다 — 견적 CM 단가를 입력하세요.',
+ g3:'램프업 곡선',e0:'1일차 효율 (%)',st:'일일 증가율 (%)',tg:'목표 효율 (%)',cu:'일별 효율 직접 입력 % (선택, 쉼표로 구분, 위 설정 대체, 이후 목표 효율 유지)',eg:'예:',
+ auto:'최소 목표 찾기',reset:'초기화',lg1:'손익분기 미달일 (손실)',lg2:'손익분기 초과일 (이익)',lg3:'누적 손익',
+ h2a:'최소 목표 효율 계산 방법',formula:'램프업 이후 라인은 오더가 끝나기 전에 램프업 손실을 회수할 만큼 높은 효율로 가동해야 합니다.',
+ h2b:'일별 램프업 계획',th:['일차','효율 %','생산량','누적 생산량','비용','CM 수입','일 손익','누적 손익'],
+ note2:'마지막 날 비용은 사용한 시간 비율로 계산하며, 라인이 다음 스타일로 전환된다고 가정합니다. 강조된 행 = 누적 손익분기일.',
+ vNo:'400일 안에 오더를 완료할 수 없습니다 — 램프업 입력값을 확인하세요',
+ vOk:(d,a)=>`${d}일차에 손익분기 도달, 최종 ${a} 이익`,
+ vLoss:(a,m)=>`오더 손실 ${a} — 손익분기를 위해 목표 효율 ${m} 필요`,more300:'300% 초과',
+ kMin:'최소 목표 효율',kMinNo:'최소 목표 (달성 불가)',kBe:'손익분기 효율',kBeOut:'손익분기 생산량/일',kCap:'100% 효율 시 생산량',kDays:'오더 완료 일수',kRamp:'램프업 기간 손실',kFirst:'첫 이익 발생일',kNet:'오더 순손익',
+ pcs:' pcs',days:n=>`${n}일`,dayN:n=>`${n}일차`,never:'없음',
+ solveNo:'목표 효율로는 이 오더의 램프업 손실을 회수할 수 없습니다 — CM 단가를 올리거나, 램프업을 단축하거나, 더 큰 오더로 진행하세요.',
+ solveOk:(m,b,x)=>`오더 전체 손익분기를 위한 최소 목표 효율: <b>${m}</b>. 일일 손익분기는 ${b}만 필요하며, 추가 ${x}는 오더 종료 전 램프업 손실을 회수합니다.`,
+ notReach:'달성 불가',nr1:'이 오더에서는 램프업 손실을 회수할 수 없습니다. CM을 올리거나, 램프업을 단축하거나, 더 큰 오더를 계획하세요.',nr2:'이 오더 수량으로는 CM이 너무 낮아 램프업 손실을 감당할 수 없습니다.',
+ e1t:'램프업 손실',e1:(n,q,lose,a)=>`1–${n}일차 ${q} pcs 생산, ${lose?'손실':'이익'} <strong>${a}</strong>`,e1none:'램프업이 없어 회수할 손실이 없습니다',
+ e2t:'남은 수량에 배분',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} pcs = ${per}/pc → 개당 최대 허용 비용 ${cm} ${sg} ${per} = <strong>${den}</strong>`,
+ e3t:'필요 일일 생산량',e3:(c,den,o)=>`일일 비용 ${c} ÷ ${den} = <strong>${o} pcs/일</strong>`,
+ e4t:'생산량을 효율로 환산',e4:(o,smv,mn,raw)=>`${o} pcs × ${smv} SMV ÷ ${mn}분 = ${raw}`,round:'정수 수량 반올림 후',
+ cdh:(hr,base,sh,mid,c)=>`${hr}시간 기준 작업자 1인 비용 = ${base} ÷ ${sh} h × ${mid} = <b>${c}/일</b>`,
+ basis:(wk,hr,mn,C,cd,beo,smv)=>`기준: 작업자 ${wk}명 × ${hr}시간 × 60 = ${mn}분/일 · 라인 일일 비용 ${C} (${wk} × ${cd}) · 손익분기 = 비용 ÷ CM = ${beo} pcs → × ${smv} SMV ÷ ${mn}분.`,
+ cEff:'일일 효율',cCum:'누적 손익 (USD)',cBe:'손익분기',cBeDay:n=>`손익분기 ${n}일차`
+},
+zh:{
+ sty:'款号',xh:'下载报告(HTML)',xc:'下载数据(CSV)',xOk:'已保存',xNo:'已取消下载',xNa:'此视图无法导出——请在 claude.ai 中打开',rGen:'报告生成时间',rIn:'输入参数',rPdf:'用浏览器打开,选择 打印 → 另存为PDF 即可生成PDF。',
+ title:'爬坡期盈亏平衡计划 · 车缝线',calc:'计算中…',
+ g1:'订单与产线',qty:'订单数量(件)',smv:'SMV(分钟/件)',wk:'产线工人数',hr:'每日工作小时',
+ g2:'成本与单价',cw:'每名工人成本(USD)',cb:'成本基准',perday:'按天',permonth:'按月',md:'每月工作天数',sh:'成本对应工时(小时/天)',ot:'加班工资率(%)',cm:'CM单价(USD/件)',cmh:'CM单价为示例值——请输入报价的每件CM。',
+ g3:'爬坡曲线',e0:'第1天效率(%)',st:'每日提升(%)',tg:'目标效率(%)',cu:'自定义每日效率%(可选,用逗号分隔,覆盖上方设置;之后保持目标效率)',eg:'例:',
+ auto:'计算最低目标',reset:'重置',lg1:'低于保本日(亏损)',lg2:'高于保本日(盈利)',lg3:'累计盈亏',
+ h2a:'最低目标效率的计算方法',formula:'爬坡期结束后,产线效率必须足够高,才能在订单结束前收回爬坡期亏损。',
+ h2b:'每日爬坡计划',th:['天','效率%','产量','累计产量','成本','CM收入','当日盈亏','累计盈亏'],
+ note2:'最后一天成本按实际使用时间比例计算,假设产线随后转做下一款。高亮行 = 累计保本日。',
+ vNo:'产线无法在400天内完成订单——请检查爬坡参数',
+ vOk:(d,a)=>`订单在第${d}天达到盈亏平衡,最终盈利${a}`,
+ vLoss:(a,m)=>`订单亏损${a}——目标效率须达到${m}才能保本`,more300:'超过300%',
+ kMin:'最低目标效率',kMinNo:'最低目标(无法达到)',kBe:'盈亏平衡效率',kBeOut:'盈亏平衡产量/天',kCap:'100%效率产量',kDays:'完成订单天数',kRamp:'爬坡期亏损',kFirst:'首个盈利日',kNet:'订单净盈亏',
+ pcs:'件',days:n=>`${n}天`,dayN:n=>`第${n}天`,never:'无',
+ solveNo:'目标效率无法弥补本订单的爬坡期亏损——请提高CM单价、缩短爬坡期或改做更大的订单。',
+ solveOk:(m,b,x)=>`整张订单保本所需的最低目标效率:<b>${m}</b>。单日保本只需${b};多出的${x}用于在订单结束前收回爬坡期亏损。`,
+ notReach:'无法达到',nr1:'本订单无法收回爬坡期亏损。请提高CM、缩短爬坡期或安排更大的订单。',nr2:'CM单价过低,以此订单数量无法弥补爬坡期亏损。',
+ e1t:'爬坡期亏损',e1:(n,q,lose,a)=>`第1–${n}天生产${q}件,${lose?'亏损':'盈利'}<strong>${a}</strong>`,e1none:'无爬坡期,无需收回亏损',
+ e2t:'分摊到剩余件数',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q}件 = ${per}/件 → 每件最多可承担成本 ${cm} ${sg} ${per} = <strong>${den}</strong>`,
+ e3t:'每天所需产量',e3:(c,den,o)=>`每日成本 ${c} ÷ ${den} = <strong>${o}件/天</strong>`,
+ e4t:'产量换算为效率',e4:(o,smv,mn,raw)=>`${o}件 × ${smv} SMV ÷ ${mn}分钟 = ${raw}`,round:'按整件取整后',
+ cdh:(hr,base,sh,mid,c)=>`${hr}小时每名工人成本 = ${base} ÷ ${sh} h × ${mid} = <b>${c}/天</b>`,
+ basis:(wk,hr,mn,C,cd,beo,smv)=>`依据:${wk}名工人 × ${hr}小时 × 60 = ${mn}分钟/天 · 产线日成本${C}(${wk} × ${cd})· 盈亏平衡 = 成本 ÷ CM = ${beo}件 → × ${smv} SMV ÷ ${mn}分钟。`,
+ cEff:'每日效率',cCum:'累计盈亏(USD)',cBe:'盈亏平衡',cBeDay:n=>`第${n}天保本`
+}};
+let lang='en';
+try{const sv=localStorage.getItem('rampLang');if(sv&&L10[sv])lang=sv}catch(e){}
+const t=k=>L10[lang][k]??L10.en[k];
+
+const $=id=>document.getElementById(id);
+const ids=['sty','qty','smv','wk','hr','cw','cb','md','sh','ot','cm','e0','st','tg','cu'];
+const defs={};ids.forEach(i=>defs[i]=$(i).value);
+const usd=v=>(v<0?'−$':'$')+Math.abs(Math.round(v)).toLocaleString('en-US');
+const d2=v=>'$'+v.toFixed(2);
+const num=v=>Math.round(v).toLocaleString('en-US');
+const pct=v=>(Math.round(v*10)/10)+'%';
+
+function applyLang(){
+  document.documentElement.lang=lang;$('lang').value=lang;
+  document.querySelectorAll('[data-i]').forEach(e=>{if(e.id!=='verdict')e.textContent=t(e.dataset.i)});
+  $('cu').placeholder=t('eg')+' 25, 38, 48, 56, 62, 66';
+  $('thr').innerHTML=t('th').map(h=>`<th>${h}</th>`).join('');
+  document.title=t('title').split(' · ')[0];
+}
+
+function read(){
+  const g=i=>parseFloat($(i).value)||0;
+  const p={qty:g('qty'),smv:g('smv'),wk:g('wk'),hr:g('hr'),cw:g('cw'),cm:g('cm'),e0:g('e0'),st:g('st'),tg:g('tg')};
+  p.base=$('cb').value==='month'?p.cw/Math.max(1,g('md')):p.cw;
+  p.sh=g('sh')||9.5;p.ot=g('ot');
+  p.reg=Math.min(p.hr,p.sh);p.oth=Math.max(0,p.hr-p.sh);
+  p.costDay=p.base/p.sh*(p.reg+p.oth*p.ot/100);
+  p.cu=$('cu').value.split(/[,\s]+/).map(parseFloat).filter(x=>!isNaN(x));
+  p.minDay=p.wk*p.hr*60; p.cap=p.smv>0?p.minDay/p.smv:0; p.C=p.wk*p.costDay;
+  p.beOut=p.cm>0?p.C/p.cm:Infinity; p.beEff=p.cap>0?p.beOut/p.cap*100:Infinity;
+  return p;
+}
+function sim(p,tg){
+  const rows=[];let done=0,cum=0,d=0,beDay=null;
+  while(done<p.qty&&d<400){
+    d++;
+    const eff=p.cu.length?(d<=p.cu.length?p.cu[d-1]:tg):Math.min(p.e0+p.st*(d-1),tg);
+    let out=Math.floor(p.cap*eff/100),frac=1;
+    if(out>p.qty-done){frac=(p.qty-done)/out;out=p.qty-done}
+    const cost=p.C*frac,rev=out*p.cm,pl=rev-cost;
+    done+=out;cum+=pl;
+    if(beDay===null&&cum>=0&&d>1)beDay=d;
+    rows.push({d,eff,out,done,cost,rev,pl,cum});
+  }
+  return {rows,done:done>=p.qty,cum,beDay};
+}
+function solve(p){
+  if(!(p.cap>0)||!(p.cm>0))return null;
+  if(sim(p,300).cum<0)return null;
+  let lo=0,hi=300;
+  for(let i=0;i<40;i++){const m=(lo+hi)/2;sim(p,m).cum>=0?hi=m:lo=m}
+  return Math.ceil(hi*10)/10;
+}
+
+function explain(p,mt){
+  const li=(h,f,c)=>`<li${c?' class="res"':''}><b>${h}</b><span class="f">${f}</span></li>`;
+  if(mt===null)return li(t('notReach'),t('nr1'));
+  const s2=sim(p,mt),rr=s2.rows.filter(r=>p.cu.length?r.d<=p.cu.length:r.eff<mt-1e-9);
+  const Qr=rr.reduce((a,r)=>a+r.out,0),PLr=rr.reduce((a,r)=>a+r.pl,0),loss=-PLr,Qs=p.qty-Qr,per=loss/Qs,den=p.cm-per,O=p.C/den;
+  if(den<=0)return li(t('notReach'),t('nr2'));
+  const raw=O*p.smv/p.minDay*100;
+  return [
+    li(t('e1t'),rr.length?t('e1')(rr.length,num(Qr),loss>=0,usd(Math.abs(loss))):t('e1none')),
+    li(t('e2t'),t('e2')(usd(Math.abs(loss)),num(Qs),d2(Math.abs(per)),d2(p.cm),loss>=0?'−':'+',d2(den))),
+    li(t('e3t'),t('e3')(usd(p.C),d2(den),num(O))),
+    li(t('e4t'),t('e4')(num(O),p.smv,num(p.minDay),pct(raw))+(Math.abs(raw-mt)>=0.05?` → <strong>${pct(mt)}</strong> ${t('round')}`:` → <strong>${pct(mt)}</strong>`),true)
+  ].join('');
+}
+
+let last=null;
+function run(){
+  $('mdl').hidden=$('cb').value!=='month';
+  const p=read(),s=sim(p,p.tg),R=s.rows;last={p,s};
+  const rampLoss=R.filter(r=>r.pl<0).reduce((a,r)=>a+r.pl,0);
+  const firstProfit=R.find(r=>r.pl>=0);
+  const mt=solve(p);
+  $('verdict').textContent=!s.done?t('vNo'):s.cum>=0?t('vOk')(s.beDay??R.length,usd(s.cum)):t('vLoss')(usd(-s.cum),mt?pct(mt):t('more300'));
+  const k=[
+    [mt===null?'>300%':pct(mt),t(mt===null?'kMinNo':'kMin'),false,true],
+    [pct(p.beEff),t('kBe')],
+    [num(p.beOut)+t('pcs'),t('kBeOut')],
+    [num(p.cap)+t('pcs'),t('kCap')],
+    [t('days')(R.length),t('kDays')],
+    [usd(rampLoss),t('kRamp'),rampLoss<0],
+    [firstProfit?t('dayN')(firstProfit.d):t('never'),t('kFirst'),!firstProfit],
+    [usd(s.cum),t('kNet'),s.cum<0]
+  ];
+  last.mt=mt;last.k=k;
+  {const sv=$('sty').value.trim();$('styTop').textContent=sv?` · ${t('sty')} ${sv}`:'';}
+  $('kpis').innerHTML=k.map(([b,l,bad,hi])=>`<div class="k${bad?' bad':''}${hi?' hi':''}"><b>${b}</b><span>${l}</span></div>`).join('');
+  $('solve').innerHTML=mt===null?t('solveNo'):t('solveOk')(pct(mt),pct(p.beEff),pct(Math.max(0,mt-p.beEff)));
+  $('how').innerHTML=explain(p,mt);
+  const mid=p.oth>0?`(${p.reg} h + ${p.oth} h OT × ${p.ot}%)`:`${p.hr} h`;
+  $('cdh').innerHTML=t('cdh')(p.hr,d2(p.base),p.sh,mid,d2(p.costDay));
+  $('basis').textContent=t('basis')(p.wk,p.hr,num(p.minDay),usd(p.C),d2(p.costDay),num(p.beOut),p.smv);
+  $('tb').innerHTML=R.map(r=>`<tr${r.d===s.beDay?' class="be"':''}><td>${r.d}</td><td>${pct(r.eff)}</td><td>${num(r.out)}</td><td>${num(r.done)}</td><td>${usd(r.cost)}</td><td>${usd(r.rev)}</td><td class="${r.pl<0?'neg':''}">${usd(r.pl)}</td><td class="${r.cum<0?'neg':''}">${usd(r.cum)}</td></tr>`).join('');
+  draw();
+}
+
+const svg=$('ch');
+function draw(){
+  if(!last)return;
+  const {p,s}=last,R=s.rows,W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;
+  const small=W<520,L=small?36:48,Rm=12,T=14,gap=34,h1=(H-T-gap-28)*0.56,h2=(H-T-gap-28)-h1;
+  const n=Math.max(R.length,1),bw=(W-L-Rm)/n,x=i=>L+i*bw;
+  const yMax=Math.max(100,...R.map(r=>r.eff),isFinite(p.beEff)?p.beEff:0)*1.08;
+  const y1=v=>T+h1-v/yMax*h1;
+  let o='';
+  for(const tk of [0,25,50,75,100].filter(v=>v<yMax)){o+=`<line x1="${L}" x2="${W-Rm}" y1="${y1(tk)}" y2="${y1(tk)}" stroke="var(--line)"/><text x="${L-6}" y="${y1(tk)+4}" text-anchor="end" font-size="12" fill="var(--mut)">${tk}%</text>`}
+  R.forEach((r,i)=>{const hh=Math.max(0,r.eff/yMax*h1);o+=`<rect x="${x(i)+bw*0.12}" y="${T+h1-hh}" width="${Math.max(1,bw*0.76)}" height="${hh}" rx="${Math.min(3,bw/4)}" fill="${r.eff<p.beEff?'var(--org)':'var(--sky)'}"><title>${t('dayN')(r.d)}: ${pct(r.eff)}, ${num(r.out)}${t('pcs')}</title></rect>`});
+  if(isFinite(p.beEff)&&p.beEff<yMax){const yb=y1(p.beEff);o+=`<line x1="${L}" x2="${W-Rm}" y1="${yb}" y2="${yb}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 5"/><rect x="${W-Rm-152}" y="${yb-24}" width="150" height="20" rx="4" fill="var(--bg)" opacity=".9"/><text x="${W-Rm-6}" y="${yb-9}" text-anchor="end" font-size="13" font-weight="600" fill="var(--ink)">${t('cBe')} ${pct(p.beEff)}</text>`}
+  o+=`<text x="${L}" y="${T-2}" font-size="12" fill="var(--mut)">${t('cEff')}</text>`;
+  const top2=T+h1+gap,vals=R.map(r=>r.cum),mx=Math.max(0,...vals),mn=Math.min(0,...vals),span=(mx-mn)||1;
+  const y2=v=>top2+(mx-v)/span*h2;
+  o+=`<text x="${L}" y="${top2-8}" font-size="12" fill="var(--mut)">${t('cCum')}</text>`;
+  o+=`<line x1="${L}" x2="${W-Rm}" y1="${y2(0)}" y2="${y2(0)}" stroke="var(--mut)"/><text x="${L-6}" y="${y2(0)+4}" text-anchor="end" font-size="12" fill="var(--mut)">0</text>`;
+  if(!small){if(mn<0)o+=`<text x="${L-6}" y="${y2(mn)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${usd(mn)}</text>`;if(mx>0)o+=`<text x="${L-6}" y="${y2(mx)+10}" text-anchor="end" font-size="11" fill="var(--mut)">${usd(mx)}</text>`}
+  const pts=R.map((r,i)=>`${x(i)+bw/2},${y2(r.cum)}`).join(' ');
+  if(R.length){o+=`<polygon points="${x(0)+bw/2},${y2(0)} ${pts} ${x(R.length-1)+bw/2},${y2(0)}" fill="var(--sky)" opacity=".22"/><polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>`;
+    const lr=R[R.length-1],lx=x(R.length-1)+bw/2,ly=y2(lr.cum);o+=`<circle cx="${lx}" cy="${ly}" r="4.5" fill="${lr.cum<0?'var(--org)':'var(--ink)'}"/>`;
+    if(s.beDay){const i=s.beDay-1,bx=x(i)+bw/2,rt=bx>W-140;o+=`<line x1="${bx}" x2="${bx}" y1="${top2}" y2="${top2+h2}" stroke="var(--org)" stroke-dasharray="3 3"/><text x="${bx+(rt?-6:6)}" y="${top2+12}" text-anchor="${rt?'end':'start'}" font-size="12" font-weight="600" fill="var(--ink)">${t('cBeDay')(s.beDay)}</text>`}}
+  const every=Math.ceil(n/(small?6:12));
+  R.forEach((r,i)=>{if((i%every===0&&n-1-i>=every*0.6)||i===n-1)o+=`<text x="${x(i)+bw/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--mut)">${small&&i?'':'D'}${r.d}</text>`});
+  svg.innerHTML=o;
+}
+const ro=new ResizeObserver(draw);ro.observe(svg);
+
+const FACTORY='Snowcoast Vietnam Co. Ltd.';
+const esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+function fname(ext){const sv=$('sty').value.trim().replace(/[^\p{L}\p{N}._-]+/gu,'_');return `RampUp_${sv||'Plan'}_${today()}.${ext}`}
+function inputGroups(){
+  const {p}=last,m=$('cb').value==='month';
+  const g1=[['sty',$('sty').value.trim()||'—'],['qty',num(p.qty)],['smv',p.smv],['wk',p.wk],['hr',p.hr]];
+  const g2=[['cw',p.cw],['cb',t(m?'permonth':'perday')]].concat(m?[['md',$('md').value]]:[],[['sh',p.sh],['ot',p.ot],['cm',p.cm]]);
+  const g3=p.cu.length?[['cu',p.cu.join(', ')],['tg',p.tg]]:[['e0',p.e0],['st',p.st],['tg',p.tg]];
+  return [['g1',g1],['g2',g2],['g3',g3]];
+}
+function reportHTML(){
+  const {p,k}=last,W=svg.clientWidth||800,H=svg.clientHeight||420;
+  const C={'var(--org)':'#ff7a1a','var(--sky)':'#4fb3e8','var(--ink)':'#10223a','var(--line)':'#dbe6ef','var(--mut)':'#53657a','var(--bg)':'#ffffff'};
+  const chart=svg.innerHTML.replace(/var\(--\w+\)/g,m=>C[m]||'#10223a');
+  const sv=$('sty').value.trim();
+  const ins=inputGroups().map(([g,rows])=>`<div><h3>${esc(t(g))}</h3><table>${rows.map(([kk,v])=>`<tr><td>${esc(t(kk))}</td><td class="n">${esc(v)}</td></tr>`).join('')}</table></div>`).join('');
+  return `<!DOCTYPE html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(t('title'))}${sv?' — '+esc(sv):''}</title>
+<style>body{font:14px/1.5 Inter,"Segoe UI","Noto Sans KR","Noto Sans SC","Microsoft YaHei",Arial,sans-serif;color:#10223a;margin:0;padding:28px;max-width:1100px}
+.hd{background:#4fb3e8;padding:20px 22px;border-radius:10px}.hd p{margin:0 0 4px}h1{font-size:26px;line-height:1.15;margin:4px 0 14px}
+.k{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.k div{background:rgba(255,255,255,.6);border-radius:8px;padding:8px 10px}.k div.hi{background:#10223a;color:#fff}.k b{display:block;font-size:19px}.k .bad b{color:#c2410c}
+h2{font-size:18px;margin:24px 0 8px}h3{font-size:14px;margin:0 0 4px}.in{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}td,th{padding:4px 8px;border-bottom:1px solid #dbe6ef;text-align:left}.n,.d td,.d th{text-align:right}.d td:first-child,.d th:first-child{text-align:center}
+.neg{color:#d9480f}tr.be td{background:#d9eef9}ol{padding:0;list-style:none;counter-reset:s}ol li{counter-increment:s;background:#f3f8fc;border-radius:8px;padding:8px 12px;margin:6px 0}ol li::before{content:counter(s) ". ";font-weight:700}ol li b{display:block}ol li.res{background:#10223a;color:#fff}
+.note{color:#53657a;font-size:12.5px}svg{width:100%;height:auto;border:1px solid #dbe6ef;border-radius:8px}.sol{background:#f3f8fc;border-radius:8px;padding:10px 12px}
+@media print{body{padding:0}.hd,.k div,ol li,tr.be td{-webkit-print-color-adjust:exact;print-color-adjust:exact}h2{break-after:avoid}.pb{break-before:page}}
+@media(max-width:700px){.k{grid-template-columns:repeat(2,1fr)}.in{grid-template-columns:1fr}}</style></head><body>
+<div class="hd"><p style="font-size:18px;font-weight:700">${FACTORY}</p><p>${esc(t('title'))}${sv?` · <b>${esc(t('sty'))} ${esc(sv)}</b>`:''}</p><p class="note" style="color:#10223a">${esc(t('rGen'))}: ${new Date().toLocaleString()}</p>
+<h1>${esc($('verdict').textContent)}</h1><div class="k">${k.map(([b,l,bad,hi])=>`<div class="${bad?'bad':''}${hi?' hi':''}"><b>${esc(b)}</b>${esc(l)}</div>`).join('')}</div></div>
+<h2>${esc(t('rIn'))}</h2><div class="in">${ins}</div><p class="note">${$('cdh').innerHTML}</p>
+<h2>${esc(t('cEff'))} · ${esc(t('cCum'))}</h2><svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial,sans-serif">${chart}</svg>
+<p class="sol">${$('solve').innerHTML}</p>
+<h2>${esc(t('h2a'))}</h2><p>${esc(t('formula'))}</p><ol>${$('how').innerHTML}</ol><p class="note">${esc($('basis').textContent)}</p>
+<h2 class="pb">${esc(t('h2b'))}</h2><table class="d"><thead><tr>${t('th').map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${$('tb').innerHTML}</tbody></table>
+<p class="note">${esc(t('note2'))}</p><p class="note">${esc(t('rPdf'))}</p></body></html>`;
+}
+function reportCSV(){
+  const {s,k}=last,q=v=>{v=String(v??'');if(/^[−$\d,.]+$/.test(v))v=v.replace(/[,$]/g,'').replace('−','-');return /[",\n\r]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
+  const L=[[FACTORY],[t('title')],[t('rGen'),today()],[]];
+  inputGroups().forEach(([g,rows])=>{L.push([t(g)]);rows.forEach(([kk,v])=>L.push([t(kk),v]))});
+  L.push([]);k.forEach(([b,l])=>L.push([l,b]));L.push([],t('th'));
+  s.rows.forEach(r=>L.push([r.d,r.eff.toFixed(1),r.out,r.done,r.cost.toFixed(2),r.rev.toFixed(2),r.pl.toFixed(2),r.cum.toFixed(2)]));
+  return '﻿'+L.map(row=>row.map(q).join(',')).join('\r\n');
+}
+function save(ext,data){
+  const fn=fname(ext),type=ext==='csv'?'text/csv;charset=utf-8':'text/html;charset=utf-8';
+  try{const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement('a');a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);$('xs').textContent=`${t('xOk')}: ${fn}`}
+  catch(e){$('xs').textContent=t('xNa')}
+}
+$('exp').hidden=false;
+$('xh').addEventListener('click',()=>save('html',reportHTML()));
+$('xc').addEventListener('click',()=>save('csv',reportCSV()));
+$('lang').addEventListener('change',e=>{lang=e.target.value;try{localStorage.setItem('rampLang',lang)}catch(err){}applyLang();run();$('xs').textContent=''});
+$('f').addEventListener('input',run);
+$('f').addEventListener('submit',e=>e.preventDefault());
+$('auto').addEventListener('click',()=>{const p=read(),m=solve(p);if(m!==null){$('tg').value=m;run()}});
+$('reset').addEventListener('click',()=>{ids.forEach(i=>$(i).value=defs[i]);run()});
+applyLang();
+run();
+}
+</script>
+</body>
+</html>
