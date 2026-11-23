@@ -144,6 +144,7 @@ td.neg{color:#d9480f}tr.be td{background:color-mix(in srgb,var(--sky) 18%,transp
 {
 const L10={
 en:{
+ kCm:'Minimum CM to break even',perPc:'/pc',vLoss2:(a,m,c)=>`Order loses ${a} — raise CM to ${c}/pc or target to ${m}`,vLossCm:(a,c)=>`Order loses ${a} — CM must be at least ${c}/pc to break even`,cmT:'Minimum CM price at your current ramp-up',cmF:(d,c,q,v)=>`Total line cost for ${d} days ${c} ÷ ${q} pcs = <strong>${v}/pc</strong>`,cmGap:(c,g,up)=>up?`Your CM ${c} is ${g}/pc short`:`Your CM ${c} covers it with ${g}/pc to spare`,solveNo2:c=>`No target efficiency can recover the ramp-up loss on this order. At this ramp-up the CM must be at least <b>${c}/pc</b>, or shorten the ramp-up, or plan a larger order.`,
  sty:'Style No.',xh:'Download report (HTML)',xc:'Download data (CSV)',xOk:'Saved',xNo:'Download cancelled',xNa:"Export isn't available in this view — open the calculator on claude.ai",rGen:'Report generated',rIn:'Inputs',rPdf:'Open in a browser and use Print → Save as PDF to make a PDF.',
  title:'Ramp-up breakeven planner · sewing line',calc:'Calculating…',
  g1:'Order and line',qty:'Order quantity (pcs)',smv:'SMV (min/pc)',wk:'Workers on line',hr:'Working hours/day',
@@ -170,6 +171,7 @@ en:{
  cEff:'Daily efficiency',cCum:'Cumulative P/L (USD)',cBe:'Breakeven',cBeDay:n=>`Breakeven day ${n}`
 },
 vi:{
+ kCm:'CM tối thiểu để hòa vốn',perPc:'/sp',vLoss2:(a,m,c)=>`Đơn hàng lỗ ${a} — tăng CM lên ${c}/sp hoặc mục tiêu lên ${m}`,vLossCm:(a,c)=>`Đơn hàng lỗ ${a} — CM phải đạt ít nhất ${c}/sp để hòa vốn`,cmT:'Giá CM tối thiểu với kế hoạch tăng năng suất hiện tại',cmF:(d,c,q,v)=>`Tổng chi phí chuyền ${d} ngày ${c} ÷ ${q} sp = <strong>${v}/sp</strong>`,cmGap:(c,g,up)=>up?`CM hiện tại ${c} còn thiếu ${g}/sp`:`CM hiện tại ${c} dư ${g}/sp`,solveNo2:c=>`Không có hiệu suất mục tiêu nào bù được lỗ giai đoạn tăng năng suất của đơn hàng này. Với kế hoạch hiện tại, CM phải đạt ít nhất <b>${c}/sp</b>, hoặc rút ngắn thời gian tăng năng suất, hoặc làm đơn hàng lớn hơn.`,
  sty:'Mã hàng (Style No.)',xh:'Tải báo cáo (HTML)',xc:'Tải dữ liệu (CSV)',xOk:'Đã lưu',xNo:'Đã hủy tải',xNa:'Không thể xuất trong chế độ xem này — hãy mở trên claude.ai',rGen:'Ngày tạo báo cáo',rIn:'Thông số đầu vào',rPdf:'Mở bằng trình duyệt và chọn In → Lưu dạng PDF để có file PDF.',
  title:'Kế hoạch tăng năng suất đạt hòa vốn · chuyền may',calc:'Đang tính…',
  g1:'Đơn hàng và chuyền',qty:'Số lượng đơn hàng (sp)',smv:'SMV (phút/sp)',wk:'Số công nhân trên chuyền',hr:'Giờ làm việc/ngày',
@@ -196,6 +198,7 @@ vi:{
  cEff:'Hiệu suất hằng ngày',cCum:'Lãi/lỗ lũy kế (USD)',cBe:'Hòa vốn',cBeDay:n=>`Hòa vốn ngày ${n}`
 },
 ko:{
+ kCm:'손익분기 최소 CM',perPc:'/pc',vLoss2:(a,m,c)=>`오더 손실 ${a} — CM ${c}/pc 이상 또는 목표 효율 ${m} 필요`,vLossCm:(a,c)=>`오더 손실 ${a} — 손익분기를 위해 CM ${c}/pc 이상 필요`,cmT:'현재 램프업 기준 최소 CM 단가',cmF:(d,c,q,v)=>`${d}일 라인 총비용 ${c} ÷ ${q} pcs = <strong>${v}/pc</strong>`,cmGap:(c,g,up)=>up?`현재 CM ${c}는 ${g}/pc 부족`:`현재 CM ${c}는 ${g}/pc 여유`,solveNo2:c=>`어떤 목표 효율로도 이 오더의 램프업 손실을 회수할 수 없습니다. 현재 램프업 기준 CM이 최소 <b>${c}/pc</b> 이상이어야 하며, 또는 램프업을 단축하거나 더 큰 오더로 진행하세요.`,
  sty:'스타일 번호',xh:'보고서 다운로드 (HTML)',xc:'데이터 다운로드 (CSV)',xOk:'저장됨',xNo:'다운로드 취소됨',xNa:'이 화면에서는 내보내기를 사용할 수 없습니다 — claude.ai에서 여세요',rGen:'보고서 작성일',rIn:'입력값',rPdf:'브라우저에서 열고 인쇄 → PDF로 저장을 선택하면 PDF가 됩니다.',
  title:'램프업 손익분기 플래너 · 봉제 라인',calc:'계산 중…',
  g1:'오더 및 라인',qty:'오더 수량 (pcs)',smv:'SMV (분/pc)',wk:'라인 작업자 수',hr:'일 근무시간',
@@ -222,6 +225,7 @@ ko:{
  cEff:'일일 효율',cCum:'누적 손익 (USD)',cBe:'손익분기',cBeDay:n=>`손익분기 ${n}일차`
 },
 zh:{
+ kCm:'保本最低CM',perPc:'/件',vLoss2:(a,m,c)=>`订单亏损${a}——CM须提高到${c}/件,或目标效率达到${m}`,vLossCm:(a,c)=>`订单亏损${a}——CM至少须达到${c}/件才能保本`,cmT:'按当前爬坡计划的最低CM单价',cmF:(d,c,q,v)=>`${d}天产线总成本${c} ÷ ${q}件 = <strong>${v}/件</strong>`,cmGap:(c,g,up)=>up?`当前CM ${c},每件差${g}`:`当前CM ${c},每件富余${g}`,solveNo2:c=>`任何目标效率都无法弥补本订单的爬坡期亏损。按当前爬坡计划,CM至少须达到<b>${c}/件</b>,或缩短爬坡期、改做更大订单。`,
  sty:'款号',xh:'下载报告(HTML)',xc:'下载数据(CSV)',xOk:'已保存',xNo:'已取消下载',xNa:'此视图无法导出——请在 claude.ai 中打开',rGen:'报告生成时间',rIn:'输入参数',rPdf:'用浏览器打开,选择 打印 → 另存为PDF 即可生成PDF。',
  title:'爬坡期盈亏平衡计划 · 车缝线',calc:'计算中…',
  g1:'订单与产线',qty:'订单数量(件)',smv:'SMV(分钟/件)',wk:'产线工人数',hr:'每日工作小时',
@@ -303,16 +307,18 @@ function solve(p){
 
 function explain(p,mt){
   const li=(h,f,c)=>`<li${c?' class="res"':''}><b>${h}</b><span class="f">${f}</span></li>`;
-  if(mt===null)return li(t('notReach'),t('nr1'));
+  const cmLi=()=>{const {minCm,totCost,s}=last;if(!isFinite(minCm))return '';const g=minCm-p.cm;return li(t('cmT'),t('cmF')(s.rows.length,usd(totCost),num(p.qty),d2(minCm))+'<br>'+t('cmGap')(d2(p.cm),d2(Math.abs(g)),g>1e-9),mt===null)};
+  if(mt===null)return li(t('notReach'),t('nr1'))+cmLi();
   const s2=sim(p,mt),rr=s2.rows.filter(r=>p.cu.length?r.d<=p.cu.length:r.eff<mt-1e-9);
   const Qr=rr.reduce((a,r)=>a+r.out,0),PLr=rr.reduce((a,r)=>a+r.pl,0),loss=-PLr,Qs=p.qty-Qr,per=loss/Qs,den=p.cm-per,O=p.C/den;
-  if(den<=0)return li(t('notReach'),t('nr2'));
+  if(den<=0)return li(t('notReach'),t('nr2'))+cmLi();
   const raw=O*p.smv/p.minDay*100;
   return [
     li(t('e1t'),rr.length?t('e1')(rr.length,num(Qr),loss>=0,usd(Math.abs(loss))):t('e1none')),
     li(t('e2t'),t('e2')(usd(Math.abs(loss)),num(Qs),d2(Math.abs(per)),d2(p.cm),loss>=0?'−':'+',d2(den))),
     li(t('e3t'),t('e3')(usd(p.C),d2(den),num(O))),
-    li(t('e4t'),t('e4')(num(O),p.smv,num(p.minDay),pct(raw))+(Math.abs(raw-mt)>=0.05?` → <strong>${pct(mt)}</strong> ${t('round')}`:` → <strong>${pct(mt)}</strong>`),true)
+    li(t('e4t'),t('e4')(num(O),p.smv,num(p.minDay),pct(raw))+(Math.abs(raw-mt)>=0.05?` → <strong>${pct(mt)}</strong> ${t('round')}`:` → <strong>${pct(mt)}</strong>`),true),
+    cmLi()
   ].join('');
 }
 
@@ -323,9 +329,11 @@ function run(){
   const rampLoss=R.filter(r=>r.pl<0).reduce((a,r)=>a+r.pl,0);
   const firstProfit=R.find(r=>r.pl>=0);
   const mt=solve(p);
-  $('verdict').textContent=!s.done?t('vNo'):s.cum>=0?t('vOk')(s.beDay??R.length,usd(s.cum)):t('vLoss')(usd(-s.cum),mt?pct(mt):t('more300'));
+  const totCost=R.reduce((a,r)=>a+r.cost,0),minCm=s.done&&p.qty>0?totCost/p.qty:Infinity;last.minCm=minCm;last.totCost=totCost;
+  $('verdict').textContent=!s.done?t('vNo'):s.cum>=0?t('vOk')(s.beDay??R.length,usd(s.cum)):(mt?t('vLoss2')(usd(-s.cum),pct(mt),d2(minCm)):t('vLossCm')(usd(-s.cum),d2(minCm)));
   const k=[
     [mt===null?'>300%':pct(mt),t(mt===null?'kMinNo':'kMin'),false,true],
+    [isFinite(minCm)?d2(minCm)+t('perPc'):'—',t('kCm'),minCm>p.cm+1e-9,mt===null],
     [pct(p.beEff),t('kBe')],
     [num(p.beOut)+t('pcs'),t('kBeOut')],
     [num(p.cap)+t('pcs'),t('kCap')],
@@ -337,7 +345,7 @@ function run(){
   last.mt=mt;last.k=k;
   {const sv=$('sty').value.trim();$('styTop').textContent=sv?` · ${t('sty')} ${sv}`:'';}
   $('kpis').innerHTML=k.map(([b,l,bad,hi])=>`<div class="k${bad?' bad':''}${hi?' hi':''}"><b>${b}</b><span>${l}</span></div>`).join('');
-  $('solve').innerHTML=mt===null?t('solveNo'):t('solveOk')(pct(mt),pct(p.beEff),pct(Math.max(0,mt-p.beEff)));
+  $('solve').innerHTML=mt===null?t('solveNo2')(d2(minCm)):t('solveOk')(pct(mt),pct(p.beEff),pct(Math.max(0,mt-p.beEff)));
   $('how').innerHTML=explain(p,mt);
   const mid=p.oth>0?`(${p.reg} h + ${p.oth} h OT × ${p.ot}%)`:`${p.hr} h`;
   $('cdh').innerHTML=t('cdh')(p.hr,d2(p.base),p.sh,mid,d2(p.costDay));
