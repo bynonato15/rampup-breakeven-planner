@@ -19,6 +19,14 @@ html:is([lang=vi],[lang=ko],[lang=zh]){--hf:Inter,"Noto Sans KR","Noto Sans SC",
 .exp{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px}.exp button{background:#10223a;color:#fff}.exp .st{font-size:14px;font-weight:500}
 .sty{font-weight:600}
 .fac{font:600 clamp(17px,2vw,20px)/1.2 var(--hf);margin:0 0 4px;color:#10223a}
+.tr{display:flex;gap:8px;flex-wrap:wrap}.tr button{background:#10223a;color:#fff}
+dialog#man{width:min(920px,94vw);max-height:88vh;overflow:auto;border:0;border-radius:16px;padding:0;background:var(--bg);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog#man::backdrop{background:rgba(10,20,35,.55)}
+.mh{position:sticky;top:0;display:flex;justify-content:flex-end;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--line)}
+.mb{padding:4px clamp(16px,3vw,32px) 28px}.mb h2{margin:14px 0 8px}.mb h3{font:600 19px/1.3 var(--hf);margin:22px 0 8px}
+.mi{color:var(--mut);margin:0 0 8px}.ms{padding-inline-start:22px;display:grid;gap:8px}.ms li::marker{font-weight:700;color:var(--skyd)}.mu{padding-inline-start:20px}
+.mt{font-size:14px}.mt td{white-space:normal;text-align:left;vertical-align:top;padding:8px 10px}.mt td:first-child{font-weight:600;width:24%}.mt td:last-child{font-variant-numeric:tabular-nums;color:var(--skyd);white-space:nowrap}
+@media(max-width:600px){.mt tr{display:grid;padding:6px 0;border-bottom:1px solid var(--line)}.mt td{border:0;padding:2px 0;width:auto!important}}
 .toprow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;margin-bottom:6px}.toprow .lab{margin:0}
 #lang{width:auto;min-width:150px;text-align:left;background:rgba(255,255,255,.7);color:#10223a;border-color:rgba(16,34,58,.25);font-weight:500}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
@@ -79,12 +87,13 @@ td.neg{color:#d9480f}tr.be td{background:color-mix(in srgb,var(--sky) 18%,transp
 <section class="band top"><div class="wrap">
   <div class="toprow">
     <div><p class="fac">Snowcoast Vietnam Co. Ltd.</p><p class="lab"><span data-i="title">Ramp-up breakeven planner · sewing line</span><span class="sty" id="styTop"></span></p></div>
+    <div class="tr"><button type="button" id="manBtn">User manual</button>
     <select id="lang" aria-label="Language">
       <option value="en">English</option>
       <option value="vi">Tiếng Việt</option>
       <option value="ko">한국어</option>
       <option value="zh">中文</option>
-    </select>
+    </select></div>
   </div>
   <h1 id="verdict" data-i="calc">Calculating…</h1>
   <div class="kpis" id="kpis"></div>
@@ -139,6 +148,8 @@ td.neg{color:#d9480f}tr.be td{background:color-mix(in srgb,var(--sky) 18%,transp
   <div class="scroll"><table><thead><tr id="thr"></tr></thead><tbody id="tb"></tbody></table></div>
   <p class="note" data-i="note2">Last day's cost is prorated by the share of the day used, assuming the line moves to the next style. Highlighted row = cumulative breakeven day.</p>
 </div></section>
+
+<dialog id="man" aria-label="User manual"><div class="mh"><button type="button" id="manX">Close</button></div><div class="mb" id="manB"></div></dialog>
 
 <script>
 {
@@ -251,6 +262,157 @@ zh:{
  basis:(wk,hr,mn,C,cd,beo,smv)=>`依据:${wk}名工人 × ${hr}小时 × 60 = ${mn}分钟/天 · 产线日成本${C}(${wk} × ${cd})· 盈亏平衡 = 成本 ÷ CM = ${beo}件 → × ${smv} SMV ÷ ${mn}分钟。`,
  cEff:'每日效率',cCum:'累计盈亏(USD)',cBe:'盈亏平衡',cBeDay:n=>`第${n}天保本`
 }};
+const MAN={
+en:{btn:'User manual',close:'Close',html:`
+<h2>User manual</h2>
+<p class="mi">This planner shows whether a new style on a sewing line will make or lose money while the line is still learning (ramp-up), and what efficiency or CM price is needed to break even on the whole order.</p>
+<h3>How to use it</h3>
+<ol class="ms">
+<li><b>Choose your language</b> with the menu at the top right. Results, report and CSV follow this language.</li>
+<li><b>Enter the order and line:</b> Style No., order quantity, SMV (minutes per piece), workers on the line and working hours per day.</li>
+<li><b>Enter the money inputs:</b> cost per worker and whether it is per day or per month; the hours that cost covers (default 9.5 h); the OT pay rate for hours above that (100% = same rate, 150% = time and a half); and the CM price per piece.</li>
+<li><b>Set the ramp-up curve:</b> day 1 efficiency, how much efficiency rises each day, and the target efficiency the line will hold. If you know the real curve from a similar style, type the daily efficiencies in <i>Custom</i> (for example 25, 38, 48, 56, 62); after the last value the line stays at the target.</li>
+<li><b>Read the result:</b> the headline says whether the order makes or loses money and on which day it breaks even. The boxes show the minimum target efficiency, the minimum CM, breakeven efficiency and output, days to finish, ramp-up loss, first profitable day and order net P/L. A box turns orange when it is a problem.</li>
+<li><b>Check the chart and table:</b> orange bars are days below breakeven (loss), blue bars are days above (profit). The line below shows cumulative P/L; where it crosses zero is the breakeven day, also highlighted in the table.</li>
+<li><b>Find what is needed:</b> click <i>Find minimum target</i> to set the target to the lowest efficiency that avoids a loss. If it shows &gt;300% (not reachable), no efficiency can save the order: use the <i>Minimum CM</i> box to negotiate the price, start the line at a higher efficiency, ramp up faster, or plan a larger order.</li>
+<li><b>Export:</b> <i>Download report (HTML)</i> gives a full report — open it in a browser and choose Print → Save as PDF. <i>Download data (CSV)</i> opens in Excel. <i>Reset</i> returns all inputs to the defaults.</li>
+</ol>
+<h3>Calculation logic</h3>
+<p class="mi">Example: 40 workers, 10 h/day, SMV 60, $50 per worker for 9.5 h, CM $8/pc.</p>
+<table class="mt"><tbody>
+<tr><td>Available minutes/day</td><td>Workers × hours × 60</td><td>40 × 10 × 60 = 24,000</td></tr>
+<tr><td>Output at 100%</td><td>Available minutes ÷ SMV</td><td>24,000 ÷ 60 = 400 pcs</td></tr>
+<tr><td>Cost per worker/day</td><td>Cost ÷ cost hours × (normal hours + OT hours × OT rate)</td><td>$50 ÷ 9.5 × 10 = $52.63</td></tr>
+<tr><td>Line cost/day</td><td>Workers × cost per worker</td><td>40 × $52.63 = $2,105</td></tr>
+<tr><td>Breakeven output/day</td><td>Line cost ÷ CM</td><td>$2,105 ÷ $8 = 263 pcs</td></tr>
+<tr><td>Breakeven efficiency</td><td>Breakeven output × SMV ÷ available minutes</td><td>263 × 60 ÷ 24,000 = 65.8%</td></tr>
+<tr><td>Efficiency on day n</td><td>Day 1 eff + (n − 1) × daily increase, never above target (or your custom list)</td><td>30%, 38%, 46% … 70%</td></tr>
+<tr><td>Daily output</td><td>Output at 100% × efficiency, rounded down</td><td>400 × 30% = 120 pcs</td></tr>
+<tr><td>Daily P/L</td><td>Output × CM − line cost</td><td>120 × $8 − $2,105 = −$1,145</td></tr>
+<tr><td>Ramp-up loss</td><td>Sum of all loss days</td><td>Days 1–5</td></tr>
+<tr><td>Minimum target efficiency</td><td>Lowest target where cumulative P/L at the end of the order is ≥ 0. The planner tests targets until it finds it; the steps are shown under <i>How the minimum target is calculated</i>.</td><td>69.1%</td></tr>
+<tr><td>Minimum CM</td><td>Total line cost of all days ÷ order quantity</td><td>$78,797 ÷ 10,000 = $7.88</td></tr>
+</tbody></table>
+<h3>Assumptions</h3>
+<ul class="mu">
+<li>Cost per worker should include everything you want covered (wages, insurance, overhead share).</li>
+<li>CM is earned on every piece produced; defects and rework are not deducted.</li>
+<li>The days counted are working days. On the last day only the share of the day used is charged, as the line moves to the next style.</li>
+<li>The planner stops at 400 days and at a 300% target.</li>
+</ul>`},
+vi:{btn:'Hướng dẫn sử dụng',close:'Đóng',html:`
+<h2>Hướng dẫn sử dụng</h2>
+<p class="mi">Công cụ này cho biết một mã hàng mới trên chuyền may sẽ lãi hay lỗ trong giai đoạn chuyền còn làm quen (tăng năng suất), và cần hiệu suất hoặc giá CM bao nhiêu để cả đơn hàng hòa vốn.</p>
+<h3>Cách sử dụng</h3>
+<ol class="ms">
+<li><b>Chọn ngôn ngữ</b> ở menu góc trên bên phải. Kết quả, báo cáo và file CSV sẽ theo ngôn ngữ này.</li>
+<li><b>Nhập thông tin đơn hàng và chuyền:</b> mã hàng, số lượng đơn hàng, SMV (phút/sản phẩm), số công nhân trên chuyền và số giờ làm việc mỗi ngày.</li>
+<li><b>Nhập chi phí:</b> chi phí mỗi công nhân và tính theo ngày hay theo tháng; số giờ mà chi phí đó bao gồm (mặc định 9,5 giờ); hệ số lương tăng ca cho giờ vượt mức đó (100% = như giờ thường, 150% = gấp rưỡi); và giá CM mỗi sản phẩm.</li>
+<li><b>Thiết lập đường cong tăng năng suất:</b> hiệu suất ngày 1, mức tăng mỗi ngày và hiệu suất mục tiêu chuyền sẽ giữ. Nếu biết đường cong thực tế từ mã hàng tương tự, hãy nhập hiệu suất từng ngày vào ô <i>tự nhập</i> (ví dụ 25, 38, 48, 56, 62); sau giá trị cuối, chuyền giữ ở mức mục tiêu.</li>
+<li><b>Đọc kết quả:</b> dòng tiêu đề cho biết đơn hàng lãi hay lỗ và hòa vốn vào ngày nào. Các ô hiển thị hiệu suất mục tiêu tối thiểu, CM tối thiểu, hiệu suất và sản lượng hòa vốn, số ngày hoàn thành, lỗ giai đoạn tăng năng suất, ngày đầu có lãi và lãi/lỗ ròng. Ô chuyển màu cam khi có vấn đề.</li>
+<li><b>Xem biểu đồ và bảng:</b> cột cam là ngày dưới hòa vốn (lỗ), cột xanh là ngày trên hòa vốn (lãi). Đường bên dưới là lãi/lỗ lũy kế; điểm cắt qua 0 là ngày hòa vốn, cũng được tô màu trong bảng.</li>
+<li><b>Tìm mức cần đạt:</b> bấm <i>Tìm mục tiêu tối thiểu</i> để đặt mục tiêu ở hiệu suất thấp nhất không bị lỗ. Nếu hiện &gt;300% (không đạt được), không hiệu suất nào cứu được đơn hàng: hãy dùng ô <i>CM tối thiểu</i> để thương lượng giá, cho chuyền bắt đầu ở hiệu suất cao hơn, tăng nhanh hơn, hoặc làm đơn hàng lớn hơn.</li>
+<li><b>Xuất file:</b> <i>Tải báo cáo (HTML)</i> cho báo cáo đầy đủ — mở bằng trình duyệt và chọn In → Lưu dạng PDF. <i>Tải dữ liệu (CSV)</i> mở được bằng Excel. <i>Đặt lại</i> đưa mọi thông số về mặc định.</li>
+</ol>
+<h3>Logic tính toán</h3>
+<p class="mi">Ví dụ: 40 công nhân, 10 giờ/ngày, SMV 60, $50 mỗi công nhân cho 9,5 giờ, CM $8/sp.</p>
+<table class="mt"><tbody>
+<tr><td>Số phút có sẵn/ngày</td><td>Công nhân × giờ × 60</td><td>40 × 10 × 60 = 24.000</td></tr>
+<tr><td>Sản lượng tại 100%</td><td>Phút có sẵn ÷ SMV</td><td>24.000 ÷ 60 = 400 sp</td></tr>
+<tr><td>Chi phí mỗi công nhân/ngày</td><td>Chi phí ÷ số giờ tính phí × (giờ thường + giờ tăng ca × hệ số tăng ca)</td><td>$50 ÷ 9,5 × 10 = $52,63</td></tr>
+<tr><td>Chi phí chuyền/ngày</td><td>Công nhân × chi phí mỗi công nhân</td><td>40 × $52,63 = $2.105</td></tr>
+<tr><td>Sản lượng hòa vốn/ngày</td><td>Chi phí chuyền ÷ CM</td><td>$2.105 ÷ $8 = 263 sp</td></tr>
+<tr><td>Hiệu suất hòa vốn</td><td>Sản lượng hòa vốn × SMV ÷ phút có sẵn</td><td>263 × 60 ÷ 24.000 = 65,8%</td></tr>
+<tr><td>Hiệu suất ngày n</td><td>Hiệu suất ngày 1 + (n − 1) × mức tăng mỗi ngày, không vượt mục tiêu (hoặc theo danh sách tự nhập)</td><td>30%, 38%, 46% … 70%</td></tr>
+<tr><td>Sản lượng ngày</td><td>Sản lượng tại 100% × hiệu suất, làm tròn xuống</td><td>400 × 30% = 120 sp</td></tr>
+<tr><td>Lãi/lỗ ngày</td><td>Sản lượng × CM − chi phí chuyền</td><td>120 × $8 − $2.105 = −$1.145</td></tr>
+<tr><td>Lỗ giai đoạn tăng năng suất</td><td>Tổng các ngày lỗ</td><td>Ngày 1–5</td></tr>
+<tr><td>Hiệu suất mục tiêu tối thiểu</td><td>Mục tiêu thấp nhất để lãi/lỗ lũy kế cuối đơn hàng ≥ 0. Công cụ thử nhiều mức mục tiêu cho đến khi tìm ra; các bước được trình bày ở phần <i>Cách tính hiệu suất mục tiêu tối thiểu</i>.</td><td>69,1%</td></tr>
+<tr><td>CM tối thiểu</td><td>Tổng chi phí chuyền của tất cả các ngày ÷ số lượng đơn hàng</td><td>$78.797 ÷ 10.000 = $7,88</td></tr>
+</tbody></table>
+<h3>Giả định</h3>
+<ul class="mu">
+<li>Chi phí mỗi công nhân nên bao gồm mọi khoản bạn muốn bù (lương, bảo hiểm, phân bổ chi phí chung).</li>
+<li>CM được tính trên mọi sản phẩm làm ra; không trừ hàng lỗi và hàng sửa.</li>
+<li>Số ngày là ngày làm việc. Ngày cuối chỉ tính chi phí theo phần thời gian sử dụng, vì chuyền chuyển sang mã hàng tiếp theo.</li>
+<li>Công cụ dừng ở 400 ngày và mục tiêu 300%.</li>
+</ul>`},
+ko:{btn:'사용 설명서',close:'닫기',html:`
+<h2>사용 설명서</h2>
+<p class="mi">이 플래너는 봉제 라인에 새 스타일을 투입했을 때 라인이 적응하는 기간(램프업) 동안 이익인지 손실인지, 그리고 오더 전체가 손익분기에 도달하려면 어떤 효율이나 CM 단가가 필요한지 보여줍니다.</p>
+<h3>사용 방법</h3>
+<ol class="ms">
+<li><b>언어 선택:</b> 오른쪽 위 메뉴에서 선택합니다. 결과, 보고서, CSV가 이 언어로 나옵니다.</li>
+<li><b>오더 및 라인 입력:</b> 스타일 번호, 오더 수량, SMV(개당 분), 라인 작업자 수, 일 근무시간.</li>
+<li><b>비용 입력:</b> 작업자 1인 비용과 일당/월급 기준, 그 비용이 포함하는 시간(기본 9.5시간), 그 시간을 넘는 잔업 수당률(100% = 동일, 150% = 1.5배), 개당 CM 단가.</li>
+<li><b>램프업 곡선 설정:</b> 1일차 효율, 일일 증가율, 라인이 유지할 목표 효율. 비슷한 스타일의 실제 곡선을 알면 <i>직접 입력</i>란에 일별 효율을 입력하세요(예: 25, 38, 48, 56, 62). 마지막 값 이후에는 목표 효율을 유지합니다.</li>
+<li><b>결과 확인:</b> 제목은 오더가 이익인지 손실인지, 며칠째 손익분기에 도달하는지 알려줍니다. 박스에는 최소 목표 효율, 최소 CM, 손익분기 효율과 생산량, 완료 일수, 램프업 손실, 첫 이익일, 오더 순손익이 표시됩니다. 문제가 있으면 주황색으로 바뀝니다.</li>
+<li><b>차트와 표 확인:</b> 주황색 막대는 손익분기 미달일(손실), 파란색 막대는 초과일(이익)입니다. 아래 선은 누적 손익이며 0을 넘는 지점이 손익분기일이고 표에서도 강조됩니다.</li>
+<li><b>필요 수준 찾기:</b> <i>최소 목표 찾기</i>를 누르면 손실이 없는 가장 낮은 효율로 목표가 설정됩니다. &gt;300%(달성 불가)로 나오면 어떤 효율로도 오더를 살릴 수 없으므로 <i>최소 CM</i> 박스로 단가를 협상하거나, 더 높은 효율로 시작하거나, 램프업을 빠르게 하거나, 더 큰 오더를 계획하세요.</li>
+<li><b>내보내기:</b> <i>보고서 다운로드 (HTML)</i>는 전체 보고서입니다 — 브라우저에서 열고 인쇄 → PDF로 저장을 선택하세요. <i>데이터 다운로드 (CSV)</i>는 Excel에서 열립니다. <i>초기화</i>는 모든 입력값을 기본값으로 되돌립니다.</li>
+</ol>
+<h3>계산 로직</h3>
+<p class="mi">예: 작업자 40명, 일 10시간, SMV 60, 9.5시간 기준 1인 $50, CM $8/pc.</p>
+<table class="mt"><tbody>
+<tr><td>일 가용 시간(분)</td><td>작업자 × 시간 × 60</td><td>40 × 10 × 60 = 24,000</td></tr>
+<tr><td>100% 효율 시 생산량</td><td>가용 시간 ÷ SMV</td><td>24,000 ÷ 60 = 400 pcs</td></tr>
+<tr><td>작업자 1인 일 비용</td><td>비용 ÷ 기준 시간 × (정규 시간 + 잔업 시간 × 잔업 수당률)</td><td>$50 ÷ 9.5 × 10 = $52.63</td></tr>
+<tr><td>라인 일 비용</td><td>작업자 × 1인 비용</td><td>40 × $52.63 = $2,105</td></tr>
+<tr><td>손익분기 생산량/일</td><td>라인 비용 ÷ CM</td><td>$2,105 ÷ $8 = 263 pcs</td></tr>
+<tr><td>손익분기 효율</td><td>손익분기 생산량 × SMV ÷ 가용 시간</td><td>263 × 60 ÷ 24,000 = 65.8%</td></tr>
+<tr><td>n일차 효율</td><td>1일차 효율 + (n − 1) × 일일 증가율, 목표 초과 불가 (또는 직접 입력값)</td><td>30%, 38%, 46% … 70%</td></tr>
+<tr><td>일 생산량</td><td>100% 생산량 × 효율, 소수점 버림</td><td>400 × 30% = 120 pcs</td></tr>
+<tr><td>일 손익</td><td>생산량 × CM − 라인 비용</td><td>120 × $8 − $2,105 = −$1,145</td></tr>
+<tr><td>램프업 손실</td><td>손실일의 합계</td><td>1–5일차</td></tr>
+<tr><td>최소 목표 효율</td><td>오더 종료 시 누적 손익이 0 이상이 되는 가장 낮은 목표. 플래너가 목표를 반복 시험하여 찾으며, 단계는 <i>최소 목표 효율 계산 방법</i>에 표시됩니다.</td><td>69.1%</td></tr>
+<tr><td>최소 CM</td><td>전체 기간 라인 총비용 ÷ 오더 수량</td><td>$78,797 ÷ 10,000 = $7.88</td></tr>
+</tbody></table>
+<h3>전제 조건</h3>
+<ul class="mu">
+<li>작업자 1인 비용에는 회수하려는 모든 비용(임금, 보험, 간접비 배분)을 포함해야 합니다.</li>
+<li>CM은 생산된 모든 수량에 대해 계산되며 불량과 수선은 차감하지 않습니다.</li>
+<li>일수는 근무일 기준입니다. 마지막 날은 라인이 다음 스타일로 전환되므로 사용한 시간만큼만 비용을 계산합니다.</li>
+<li>플래너는 400일, 목표 300%에서 계산을 멈춥니다.</li>
+</ul>`},
+zh:{btn:'使用说明',close:'关闭',html:`
+<h2>使用说明</h2>
+<p class="mi">本工具显示新款上车缝线后,在产线熟悉期(爬坡期)内是盈利还是亏损,以及整张订单要保本需要多高的效率或多少CM单价。</p>
+<h3>使用步骤</h3>
+<ol class="ms">
+<li><b>选择语言:</b>在右上角菜单选择。结果、报告和CSV都会使用该语言。</li>
+<li><b>输入订单与产线:</b>款号、订单数量、SMV(每件分钟数)、产线工人数和每日工作小时。</li>
+<li><b>输入成本:</b>每名工人成本及按天或按月计算;该成本对应的工时(默认9.5小时);超出部分的加班工资率(100% = 与正常相同,150% = 1.5倍);以及每件CM单价。</li>
+<li><b>设置爬坡曲线:</b>第1天效率、每日提升幅度和产线保持的目标效率。如果有类似款式的实际曲线,可在<i>自定义</i>栏输入每日效率(例如 25, 38, 48, 56, 62);最后一个值之后保持目标效率。</li>
+<li><b>查看结果:</b>标题显示订单盈利还是亏损,以及第几天保本。方框显示最低目标效率、最低CM、保本效率和产量、完成天数、爬坡期亏损、首个盈利日和订单净盈亏。有问题的方框会变成橙色。</li>
+<li><b>查看图表和表格:</b>橙色柱为低于保本的日子(亏损),蓝色柱为高于保本的日子(盈利)。下方曲线为累计盈亏,越过0的点就是保本日,表格中也会高亮显示。</li>
+<li><b>找出所需条件:</b>点击<i>计算最低目标</i>,目标会设为不亏损的最低效率。如果显示 &gt;300%(无法达到),说明任何效率都无法挽回该订单:请用<i>最低CM</i>方框议价、让产线以更高效率起步、加快爬坡或安排更大的订单。</li>
+<li><b>导出:</b><i>下载报告(HTML)</i>为完整报告——用浏览器打开,选择 打印 → 另存为PDF。<i>下载数据(CSV)</i>可用Excel打开。<i>重置</i>会把所有输入恢复为默认值。</li>
+</ol>
+<h3>计算逻辑</h3>
+<p class="mi">示例:40名工人,每天10小时,SMV 60,每人9.5小时成本$50,CM $8/件。</p>
+<table class="mt"><tbody>
+<tr><td>每日可用分钟</td><td>工人数 × 小时 × 60</td><td>40 × 10 × 60 = 24,000</td></tr>
+<tr><td>100%效率产量</td><td>可用分钟 ÷ SMV</td><td>24,000 ÷ 60 = 400件</td></tr>
+<tr><td>每名工人日成本</td><td>成本 ÷ 对应工时 × (正常工时 + 加班工时 × 加班工资率)</td><td>$50 ÷ 9.5 × 10 = $52.63</td></tr>
+<tr><td>产线日成本</td><td>工人数 × 每人成本</td><td>40 × $52.63 = $2,105</td></tr>
+<tr><td>保本产量/天</td><td>产线成本 ÷ CM</td><td>$2,105 ÷ $8 = 263件</td></tr>
+<tr><td>保本效率</td><td>保本产量 × SMV ÷ 可用分钟</td><td>263 × 60 ÷ 24,000 = 65.8%</td></tr>
+<tr><td>第n天效率</td><td>第1天效率 + (n − 1) × 每日提升,不超过目标(或按自定义数值)</td><td>30%, 38%, 46% … 70%</td></tr>
+<tr><td>每日产量</td><td>100%产量 × 效率,向下取整</td><td>400 × 30% = 120件</td></tr>
+<tr><td>每日盈亏</td><td>产量 × CM − 产线成本</td><td>120 × $8 − $2,105 = −$1,145</td></tr>
+<tr><td>爬坡期亏损</td><td>所有亏损日之和</td><td>第1–5天</td></tr>
+<tr><td>最低目标效率</td><td>订单结束时累计盈亏 ≥ 0 的最低目标。工具会反复试算直到找到;步骤见<i>最低目标效率的计算方法</i>。</td><td>69.1%</td></tr>
+<tr><td>最低CM</td><td>所有天数的产线总成本 ÷ 订单数量</td><td>$78,797 ÷ 10,000 = $7.88</td></tr>
+</tbody></table>
+<h3>前提假设</h3>
+<ul class="mu">
+<li>每名工人成本应包含所有需要回收的费用(工资、保险、分摊的间接费用)。</li>
+<li>CM按全部产出计算,未扣除次品和返工。</li>
+<li>天数为工作日。最后一天只按实际使用时间计算成本,因为产线随后转做下一款。</li>
+<li>工具最多计算400天,目标效率上限300%。</li>
+</ul>`}
+};
+
 let lang='en';
 try{const sv=localStorage.getItem('rampLang');if(sv&&L10[sv])lang=sv}catch(e){}
 const t=k=>L10[lang][k]??L10.en[k];
@@ -269,6 +431,7 @@ function applyLang(){
   $('cu').placeholder=t('eg')+' 25, 38, 48, 56, 62, 66';
   $('thr').innerHTML=t('th').map(h=>`<th>${h}</th>`).join('');
   document.title=t('title').split(' · ')[0];
+  $('manBtn').textContent=MAN[lang].btn;$('manX').textContent=MAN[lang].close;$('manB').innerHTML=MAN[lang].html;
 }
 
 function read(){
@@ -435,6 +598,9 @@ $('exp').hidden=false;
 $('xh').addEventListener('click',()=>save('html',reportHTML()));
 $('xc').addEventListener('click',()=>save('csv',reportCSV()));
 $('lang').addEventListener('change',e=>{lang=e.target.value;try{localStorage.setItem('rampLang',lang)}catch(err){}applyLang();run();$('xs').textContent=''});
+$('manBtn').addEventListener('click',()=>{const d=$('man');try{d.showModal()}catch(e){d.setAttribute('open','')}d.querySelector('.mb').scrollTop=0});
+$('manX').addEventListener('click',()=>{const d=$('man');try{d.close()}catch(e){d.removeAttribute('open')}});
+$('man').addEventListener('click',e=>{if(e.target.id==='man')$('manX').click()});
 $('f').addEventListener('input',run);
 $('f').addEventListener('submit',e=>e.preventDefault());
 $('auto').addEventListener('click',()=>{const p=read(),m=solve(p);if(m!==null){$('tg').value=m;run()}});
