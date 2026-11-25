@@ -156,6 +156,7 @@ td.neg{color:#d9480f}tr.be td{background:color-mix(in srgb,var(--sky) 18%,transp
 const L10={
 en:{
  kCm:'Minimum CM to break even',perPc:'/pc',vLoss2:(a,m,c)=>`Order loses ${a} — raise CM to ${c}/pc or target to ${m}`,vLossCm:(a,c)=>`Order loses ${a} — CM must be at least ${c}/pc to break even`,cmT:'Minimum CM price at your current ramp-up',cmF:(d,c,q,v)=>`Total line cost for ${d} days ${c} ÷ ${q} pcs = <strong>${v}/pc</strong>`,cmGap:(c,g,up)=>up?`Your CM ${c} is ${g}/pc short`:`Your CM ${c} covers it with ${g}/pc to spare`,solveNo2:c=>`No target efficiency can recover the ramp-up loss on this order. At this ramp-up the CM must be at least <b>${c}/pc</b>, or shorten the ramp-up, or plan a larger order.`,
+ imp:'Not possible',kMinNo2:'Minimum target — order ends during ramp-up',kMinHi:'Minimum target (above 100%, not realistic)',
  sty:'Style No.',xh:'Download report (HTML)',xc:'Download data (CSV)',xOk:'Saved',xNo:'Download cancelled',xNa:"Export isn't available in this view — open the calculator on claude.ai",rGen:'Report generated',rIn:'Inputs',rPdf:'Open in a browser and use Print → Save as PDF to make a PDF.',
  title:'Ramp-up breakeven planner · sewing line',calc:'Calculating…',
  g1:'Order and line',qty:'Order quantity (pcs)',smv:'SMV (min/pc)',wk:'Workers on line',hr:'Working hours/day',
@@ -172,7 +173,7 @@ en:{
  pcs:' pcs',days:n=>`${n} days`,dayN:n=>`Day ${n}`,never:'Never',
  solveNo:'Target efficiency can\'t recover the ramp-up loss on this order — raise the CM price, shorten the ramp-up or move to a larger order.',
  solveOk:(m,b,x)=>`Minimum target efficiency to break even on the whole order: <b>${m}</b>. Daily breakeven alone needs ${b}; the extra ${x} pays back the ramp-up loss before the order ends.`,
- notReach:'Not reachable',nr1:'The line cannot earn back the ramp-up loss on this order. Raise CM, shorten ramp-up or plan a bigger order.',nr2:'CM is too low to cover the ramp-up loss on this order size.',
+ notReach:'Not reachable',nr1:'The order finishes while the line is still ramping up, so even an unlimited target cannot earn back the ramp-up loss. Raise CM, start at a higher efficiency, ramp up faster or plan a bigger order.',nr2:'CM is too low to cover the ramp-up loss on this order size.',
  e1t:'Ramp-up loss',e1:(n,q,lose,a)=>`Day 1–${n} make ${q} pcs and ${lose?'lose':'gain'} <strong>${a}</strong>`,e1none:'No ramp-up, so nothing to recover',
  e2t:'Share it over the pieces left',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} pcs = ${per}/pc → each piece may cost at most ${cm} ${sg} ${per} = <strong>${den}</strong>`,
  e3t:'Output needed per day',e3:(c,den,o)=>`Daily cost ${c} ÷ ${den} = <strong>${o} pcs/day</strong>`,
@@ -183,6 +184,7 @@ en:{
 },
 vi:{
  kCm:'CM tối thiểu để hòa vốn',perPc:'/sp',vLoss2:(a,m,c)=>`Đơn hàng lỗ ${a} — tăng CM lên ${c}/sp hoặc mục tiêu lên ${m}`,vLossCm:(a,c)=>`Đơn hàng lỗ ${a} — CM phải đạt ít nhất ${c}/sp để hòa vốn`,cmT:'Giá CM tối thiểu với kế hoạch tăng năng suất hiện tại',cmF:(d,c,q,v)=>`Tổng chi phí chuyền ${d} ngày ${c} ÷ ${q} sp = <strong>${v}/sp</strong>`,cmGap:(c,g,up)=>up?`CM hiện tại ${c} còn thiếu ${g}/sp`:`CM hiện tại ${c} dư ${g}/sp`,solveNo2:c=>`Không có hiệu suất mục tiêu nào bù được lỗ giai đoạn tăng năng suất của đơn hàng này. Với kế hoạch hiện tại, CM phải đạt ít nhất <b>${c}/sp</b>, hoặc rút ngắn thời gian tăng năng suất, hoặc làm đơn hàng lớn hơn.`,
+ imp:'Không thể',kMinNo2:'Mục tiêu tối thiểu — đơn hàng kết thúc khi còn tăng năng suất',kMinHi:'Mục tiêu tối thiểu (trên 100%, không thực tế)',
  sty:'Mã hàng (Style No.)',xh:'Tải báo cáo (HTML)',xc:'Tải dữ liệu (CSV)',xOk:'Đã lưu',xNo:'Đã hủy tải',xNa:'Không thể xuất trong chế độ xem này — hãy mở trên claude.ai',rGen:'Ngày tạo báo cáo',rIn:'Thông số đầu vào',rPdf:'Mở bằng trình duyệt và chọn In → Lưu dạng PDF để có file PDF.',
  title:'Kế hoạch tăng năng suất đạt hòa vốn · chuyền may',calc:'Đang tính…',
  g1:'Đơn hàng và chuyền',qty:'Số lượng đơn hàng (sp)',smv:'SMV (phút/sp)',wk:'Số công nhân trên chuyền',hr:'Giờ làm việc/ngày',
@@ -199,7 +201,7 @@ vi:{
  pcs:' sp',days:n=>`${n} ngày`,dayN:n=>`Ngày ${n}`,never:'Không có',
  solveNo:'Hiệu suất mục tiêu không thể bù lỗ giai đoạn tăng năng suất của đơn hàng này — hãy tăng giá CM, rút ngắn thời gian tăng năng suất hoặc làm đơn hàng lớn hơn.',
  solveOk:(m,b,x)=>`Hiệu suất mục tiêu tối thiểu để cả đơn hàng hòa vốn: <b>${m}</b>. Hòa vốn theo ngày chỉ cần ${b}; phần thêm ${x} dùng để bù lỗ giai đoạn tăng năng suất trước khi đơn hàng kết thúc.`,
- notReach:'Không đạt được',nr1:'Chuyền không thể bù lại khoản lỗ giai đoạn tăng năng suất của đơn hàng này. Hãy tăng CM, rút ngắn thời gian tăng năng suất hoặc làm đơn hàng lớn hơn.',nr2:'Giá CM quá thấp để bù lỗ giai đoạn tăng năng suất với số lượng đơn này.',
+ notReach:'Không đạt được',nr1:'Đơn hàng kết thúc khi chuyền vẫn đang tăng năng suất, nên dù mục tiêu cao bao nhiêu cũng không bù được lỗ. Hãy tăng CM, bắt đầu ở hiệu suất cao hơn, tăng nhanh hơn hoặc làm đơn hàng lớn hơn.',nr2:'Giá CM quá thấp để bù lỗ giai đoạn tăng năng suất với số lượng đơn này.',
  e1t:'Lỗ giai đoạn tăng năng suất',e1:(n,q,lose,a)=>`Ngày 1–${n} làm ${q} sp và ${lose?'lỗ':'lãi'} <strong>${a}</strong>`,e1none:'Không có giai đoạn tăng năng suất, không cần bù lỗ',
  e2t:'Chia cho số sản phẩm còn lại',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} sp = ${per}/sp → chi phí mỗi sản phẩm tối đa ${cm} ${sg} ${per} = <strong>${den}</strong>`,
  e3t:'Sản lượng cần mỗi ngày',e3:(c,den,o)=>`Chi phí ngày ${c} ÷ ${den} = <strong>${o} sp/ngày</strong>`,
@@ -210,6 +212,7 @@ vi:{
 },
 ko:{
  kCm:'손익분기 최소 CM',perPc:'/pc',vLoss2:(a,m,c)=>`오더 손실 ${a} — CM ${c}/pc 이상 또는 목표 효율 ${m} 필요`,vLossCm:(a,c)=>`오더 손실 ${a} — 손익분기를 위해 CM ${c}/pc 이상 필요`,cmT:'현재 램프업 기준 최소 CM 단가',cmF:(d,c,q,v)=>`${d}일 라인 총비용 ${c} ÷ ${q} pcs = <strong>${v}/pc</strong>`,cmGap:(c,g,up)=>up?`현재 CM ${c}는 ${g}/pc 부족`:`현재 CM ${c}는 ${g}/pc 여유`,solveNo2:c=>`어떤 목표 효율로도 이 오더의 램프업 손실을 회수할 수 없습니다. 현재 램프업 기준 CM이 최소 <b>${c}/pc</b> 이상이어야 하며, 또는 램프업을 단축하거나 더 큰 오더로 진행하세요.`,
+ imp:'불가능',kMinNo2:'최소 목표 — 램프업 중 오더 종료',kMinHi:'최소 목표 (100% 초과, 비현실적)',
  sty:'스타일 번호',xh:'보고서 다운로드 (HTML)',xc:'데이터 다운로드 (CSV)',xOk:'저장됨',xNo:'다운로드 취소됨',xNa:'이 화면에서는 내보내기를 사용할 수 없습니다 — claude.ai에서 여세요',rGen:'보고서 작성일',rIn:'입력값',rPdf:'브라우저에서 열고 인쇄 → PDF로 저장을 선택하면 PDF가 됩니다.',
  title:'램프업 손익분기 플래너 · 봉제 라인',calc:'계산 중…',
  g1:'오더 및 라인',qty:'오더 수량 (pcs)',smv:'SMV (분/pc)',wk:'라인 작업자 수',hr:'일 근무시간',
@@ -226,7 +229,7 @@ ko:{
  pcs:' pcs',days:n=>`${n}일`,dayN:n=>`${n}일차`,never:'없음',
  solveNo:'목표 효율로는 이 오더의 램프업 손실을 회수할 수 없습니다 — CM 단가를 올리거나, 램프업을 단축하거나, 더 큰 오더로 진행하세요.',
  solveOk:(m,b,x)=>`오더 전체 손익분기를 위한 최소 목표 효율: <b>${m}</b>. 일일 손익분기는 ${b}만 필요하며, 추가 ${x}는 오더 종료 전 램프업 손실을 회수합니다.`,
- notReach:'달성 불가',nr1:'이 오더에서는 램프업 손실을 회수할 수 없습니다. CM을 올리거나, 램프업을 단축하거나, 더 큰 오더를 계획하세요.',nr2:'이 오더 수량으로는 CM이 너무 낮아 램프업 손실을 감당할 수 없습니다.',
+ notReach:'달성 불가',nr1:'라인이 아직 램프업 중일 때 오더가 끝나므로 목표를 아무리 높여도 램프업 손실을 회수할 수 없습니다. CM을 올리거나, 더 높은 효율로 시작하거나, 램프업을 빠르게 하거나, 더 큰 오더를 계획하세요.',nr2:'이 오더 수량으로는 CM이 너무 낮아 램프업 손실을 감당할 수 없습니다.',
  e1t:'램프업 손실',e1:(n,q,lose,a)=>`1–${n}일차 ${q} pcs 생산, ${lose?'손실':'이익'} <strong>${a}</strong>`,e1none:'램프업이 없어 회수할 손실이 없습니다',
  e2t:'남은 수량에 배분',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q} pcs = ${per}/pc → 개당 최대 허용 비용 ${cm} ${sg} ${per} = <strong>${den}</strong>`,
  e3t:'필요 일일 생산량',e3:(c,den,o)=>`일일 비용 ${c} ÷ ${den} = <strong>${o} pcs/일</strong>`,
@@ -237,6 +240,7 @@ ko:{
 },
 zh:{
  kCm:'保本最低CM',perPc:'/件',vLoss2:(a,m,c)=>`订单亏损${a}——CM须提高到${c}/件,或目标效率达到${m}`,vLossCm:(a,c)=>`订单亏损${a}——CM至少须达到${c}/件才能保本`,cmT:'按当前爬坡计划的最低CM单价',cmF:(d,c,q,v)=>`${d}天产线总成本${c} ÷ ${q}件 = <strong>${v}/件</strong>`,cmGap:(c,g,up)=>up?`当前CM ${c},每件差${g}`:`当前CM ${c},每件富余${g}`,solveNo2:c=>`任何目标效率都无法弥补本订单的爬坡期亏损。按当前爬坡计划,CM至少须达到<b>${c}/件</b>,或缩短爬坡期、改做更大订单。`,
+ imp:'不可能',kMinNo2:'最低目标——订单在爬坡期内结束',kMinHi:'最低目标(超过100%,不现实)',
  sty:'款号',xh:'下载报告(HTML)',xc:'下载数据(CSV)',xOk:'已保存',xNo:'已取消下载',xNa:'此视图无法导出——请在 claude.ai 中打开',rGen:'报告生成时间',rIn:'输入参数',rPdf:'用浏览器打开,选择 打印 → 另存为PDF 即可生成PDF。',
  title:'爬坡期盈亏平衡计划 · 车缝线',calc:'计算中…',
  g1:'订单与产线',qty:'订单数量(件)',smv:'SMV(分钟/件)',wk:'产线工人数',hr:'每日工作小时',
@@ -253,7 +257,7 @@ zh:{
  pcs:'件',days:n=>`${n}天`,dayN:n=>`第${n}天`,never:'无',
  solveNo:'目标效率无法弥补本订单的爬坡期亏损——请提高CM单价、缩短爬坡期或改做更大的订单。',
  solveOk:(m,b,x)=>`整张订单保本所需的最低目标效率:<b>${m}</b>。单日保本只需${b};多出的${x}用于在订单结束前收回爬坡期亏损。`,
- notReach:'无法达到',nr1:'本订单无法收回爬坡期亏损。请提高CM、缩短爬坡期或安排更大的订单。',nr2:'CM单价过低,以此订单数量无法弥补爬坡期亏损。',
+ notReach:'无法达到',nr1:'订单在产线仍处于爬坡期时就已结束,目标效率再高也无法收回爬坡期亏损。请提高CM、以更高效率起步、加快爬坡或安排更大的订单。',nr2:'CM单价过低,以此订单数量无法弥补爬坡期亏损。',
  e1t:'爬坡期亏损',e1:(n,q,lose,a)=>`第1–${n}天生产${q}件,${lose?'亏损':'盈利'}<strong>${a}</strong>`,e1none:'无爬坡期,无需收回亏损',
  e2t:'分摊到剩余件数',e2:(a,q,per,cm,sg,den)=>`${a} ÷ ${q}件 = ${per}/件 → 每件最多可承担成本 ${cm} ${sg} ${per} = <strong>${den}</strong>`,
  e3t:'每天所需产量',e3:(c,den,o)=>`每日成本 ${c} ÷ ${den} = <strong>${o}件/天</strong>`,
@@ -274,7 +278,7 @@ en:{btn:'User manual',close:'Close',html:`
 <li><b>Set the ramp-up curve:</b> day 1 efficiency, how much efficiency rises each day, and the target efficiency the line will hold. If you know the real curve from a similar style, type the daily efficiencies in <i>Custom</i> (for example 25, 38, 48, 56, 62); after the last value the line stays at the target.</li>
 <li><b>Read the result:</b> the headline says whether the order makes or loses money and on which day it breaks even. The boxes show the minimum target efficiency, the minimum CM, breakeven efficiency and output, days to finish, ramp-up loss, first profitable day and order net P/L. A box turns orange when it is a problem.</li>
 <li><b>Check the chart and table:</b> orange bars are days below breakeven (loss), blue bars are days above (profit). The line below shows cumulative P/L; where it crosses zero is the breakeven day, also highlighted in the table.</li>
-<li><b>Find what is needed:</b> click <i>Find minimum target</i> to set the target to the lowest efficiency that avoids a loss. If it shows &gt;300% (not reachable), no efficiency can save the order: use the <i>Minimum CM</i> box to negotiate the price, start the line at a higher efficiency, ramp up faster, or plan a larger order.</li>
+<li><b>Find what is needed:</b> click <i>Find minimum target</i> to set the target to the lowest efficiency that avoids a loss. A value above 100% is not realistic. If it shows <i>Not possible</i>, the order ends while the line is still ramping up, so no efficiency can save it: use the <i>Minimum CM</i> box to negotiate the price, start the line at a higher efficiency, ramp up faster, or plan a larger order.</li>
 <li><b>Export:</b> <i>Download report (HTML)</i> gives a full report — open it in a browser and choose Print → Save as PDF. <i>Download data (CSV)</i> opens in Excel. <i>Reset</i> returns all inputs to the defaults.</li>
 </ol>
 <h3>Calculation logic</h3>
@@ -298,7 +302,7 @@ en:{btn:'User manual',close:'Close',html:`
 <li>Cost per worker should include everything you want covered (wages, insurance, overhead share).</li>
 <li>CM is earned on every piece produced; defects and rework are not deducted.</li>
 <li>The days counted are working days. On the last day only the share of the day used is charged, as the line moves to the next style.</li>
-<li>The planner stops at 400 days and at a 300% target.</li>
+<li>The planner stops at 400 days.</li>
 </ul>`},
 vi:{btn:'Hướng dẫn sử dụng',close:'Đóng',html:`
 <h2>Hướng dẫn sử dụng</h2>
@@ -311,7 +315,7 @@ vi:{btn:'Hướng dẫn sử dụng',close:'Đóng',html:`
 <li><b>Thiết lập đường cong tăng năng suất:</b> hiệu suất ngày 1, mức tăng mỗi ngày và hiệu suất mục tiêu chuyền sẽ giữ. Nếu biết đường cong thực tế từ mã hàng tương tự, hãy nhập hiệu suất từng ngày vào ô <i>tự nhập</i> (ví dụ 25, 38, 48, 56, 62); sau giá trị cuối, chuyền giữ ở mức mục tiêu.</li>
 <li><b>Đọc kết quả:</b> dòng tiêu đề cho biết đơn hàng lãi hay lỗ và hòa vốn vào ngày nào. Các ô hiển thị hiệu suất mục tiêu tối thiểu, CM tối thiểu, hiệu suất và sản lượng hòa vốn, số ngày hoàn thành, lỗ giai đoạn tăng năng suất, ngày đầu có lãi và lãi/lỗ ròng. Ô chuyển màu cam khi có vấn đề.</li>
 <li><b>Xem biểu đồ và bảng:</b> cột cam là ngày dưới hòa vốn (lỗ), cột xanh là ngày trên hòa vốn (lãi). Đường bên dưới là lãi/lỗ lũy kế; điểm cắt qua 0 là ngày hòa vốn, cũng được tô màu trong bảng.</li>
-<li><b>Tìm mức cần đạt:</b> bấm <i>Tìm mục tiêu tối thiểu</i> để đặt mục tiêu ở hiệu suất thấp nhất không bị lỗ. Nếu hiện &gt;300% (không đạt được), không hiệu suất nào cứu được đơn hàng: hãy dùng ô <i>CM tối thiểu</i> để thương lượng giá, cho chuyền bắt đầu ở hiệu suất cao hơn, tăng nhanh hơn, hoặc làm đơn hàng lớn hơn.</li>
+<li><b>Tìm mức cần đạt:</b> bấm <i>Tìm mục tiêu tối thiểu</i> để đặt mục tiêu ở hiệu suất thấp nhất không bị lỗ. Giá trị trên 100% là không thực tế. Nếu hiện <i>Không thể</i>, đơn hàng kết thúc khi chuyền còn đang tăng năng suất nên không hiệu suất nào cứu được: hãy dùng ô <i>CM tối thiểu</i> để thương lượng giá, cho chuyền bắt đầu ở hiệu suất cao hơn, tăng nhanh hơn, hoặc làm đơn hàng lớn hơn.</li>
 <li><b>Xuất file:</b> <i>Tải báo cáo (HTML)</i> cho báo cáo đầy đủ — mở bằng trình duyệt và chọn In → Lưu dạng PDF. <i>Tải dữ liệu (CSV)</i> mở được bằng Excel. <i>Đặt lại</i> đưa mọi thông số về mặc định.</li>
 </ol>
 <h3>Logic tính toán</h3>
@@ -335,7 +339,7 @@ vi:{btn:'Hướng dẫn sử dụng',close:'Đóng',html:`
 <li>Chi phí mỗi công nhân nên bao gồm mọi khoản bạn muốn bù (lương, bảo hiểm, phân bổ chi phí chung).</li>
 <li>CM được tính trên mọi sản phẩm làm ra; không trừ hàng lỗi và hàng sửa.</li>
 <li>Số ngày là ngày làm việc. Ngày cuối chỉ tính chi phí theo phần thời gian sử dụng, vì chuyền chuyển sang mã hàng tiếp theo.</li>
-<li>Công cụ dừng ở 400 ngày và mục tiêu 300%.</li>
+<li>Công cụ dừng ở 400 ngày.</li>
 </ul>`},
 ko:{btn:'사용 설명서',close:'닫기',html:`
 <h2>사용 설명서</h2>
@@ -348,7 +352,7 @@ ko:{btn:'사용 설명서',close:'닫기',html:`
 <li><b>램프업 곡선 설정:</b> 1일차 효율, 일일 증가율, 라인이 유지할 목표 효율. 비슷한 스타일의 실제 곡선을 알면 <i>직접 입력</i>란에 일별 효율을 입력하세요(예: 25, 38, 48, 56, 62). 마지막 값 이후에는 목표 효율을 유지합니다.</li>
 <li><b>결과 확인:</b> 제목은 오더가 이익인지 손실인지, 며칠째 손익분기에 도달하는지 알려줍니다. 박스에는 최소 목표 효율, 최소 CM, 손익분기 효율과 생산량, 완료 일수, 램프업 손실, 첫 이익일, 오더 순손익이 표시됩니다. 문제가 있으면 주황색으로 바뀝니다.</li>
 <li><b>차트와 표 확인:</b> 주황색 막대는 손익분기 미달일(손실), 파란색 막대는 초과일(이익)입니다. 아래 선은 누적 손익이며 0을 넘는 지점이 손익분기일이고 표에서도 강조됩니다.</li>
-<li><b>필요 수준 찾기:</b> <i>최소 목표 찾기</i>를 누르면 손실이 없는 가장 낮은 효율로 목표가 설정됩니다. &gt;300%(달성 불가)로 나오면 어떤 효율로도 오더를 살릴 수 없으므로 <i>최소 CM</i> 박스로 단가를 협상하거나, 더 높은 효율로 시작하거나, 램프업을 빠르게 하거나, 더 큰 오더를 계획하세요.</li>
+<li><b>필요 수준 찾기:</b> <i>최소 목표 찾기</i>를 누르면 손실이 없는 가장 낮은 효율로 목표가 설정됩니다. 100%를 넘는 값은 비현실적입니다. <i>불가능</i>으로 나오면 램프업 중에 오더가 끝나 어떤 효율로도 살릴 수 없으므로 <i>최소 CM</i> 박스로 단가를 협상하거나, 더 높은 효율로 시작하거나, 램프업을 빠르게 하거나, 더 큰 오더를 계획하세요.</li>
 <li><b>내보내기:</b> <i>보고서 다운로드 (HTML)</i>는 전체 보고서입니다 — 브라우저에서 열고 인쇄 → PDF로 저장을 선택하세요. <i>데이터 다운로드 (CSV)</i>는 Excel에서 열립니다. <i>초기화</i>는 모든 입력값을 기본값으로 되돌립니다.</li>
 </ol>
 <h3>계산 로직</h3>
@@ -372,7 +376,7 @@ ko:{btn:'사용 설명서',close:'닫기',html:`
 <li>작업자 1인 비용에는 회수하려는 모든 비용(임금, 보험, 간접비 배분)을 포함해야 합니다.</li>
 <li>CM은 생산된 모든 수량에 대해 계산되며 불량과 수선은 차감하지 않습니다.</li>
 <li>일수는 근무일 기준입니다. 마지막 날은 라인이 다음 스타일로 전환되므로 사용한 시간만큼만 비용을 계산합니다.</li>
-<li>플래너는 400일, 목표 300%에서 계산을 멈춥니다.</li>
+<li>플래너는 400일에서 계산을 멈춥니다.</li>
 </ul>`},
 zh:{btn:'使用说明',close:'关闭',html:`
 <h2>使用说明</h2>
@@ -385,7 +389,7 @@ zh:{btn:'使用说明',close:'关闭',html:`
 <li><b>设置爬坡曲线:</b>第1天效率、每日提升幅度和产线保持的目标效率。如果有类似款式的实际曲线,可在<i>自定义</i>栏输入每日效率(例如 25, 38, 48, 56, 62);最后一个值之后保持目标效率。</li>
 <li><b>查看结果:</b>标题显示订单盈利还是亏损,以及第几天保本。方框显示最低目标效率、最低CM、保本效率和产量、完成天数、爬坡期亏损、首个盈利日和订单净盈亏。有问题的方框会变成橙色。</li>
 <li><b>查看图表和表格:</b>橙色柱为低于保本的日子(亏损),蓝色柱为高于保本的日子(盈利)。下方曲线为累计盈亏,越过0的点就是保本日,表格中也会高亮显示。</li>
-<li><b>找出所需条件:</b>点击<i>计算最低目标</i>,目标会设为不亏损的最低效率。如果显示 &gt;300%(无法达到),说明任何效率都无法挽回该订单:请用<i>最低CM</i>方框议价、让产线以更高效率起步、加快爬坡或安排更大的订单。</li>
+<li><b>找出所需条件:</b>点击<i>计算最低目标</i>,目标会设为不亏损的最低效率。超过100%的数值不现实。如果显示<i>不可能</i>,说明订单在爬坡期内就结束,任何效率都无法挽回:请用<i>最低CM</i>方框议价、让产线以更高效率起步、加快爬坡或安排更大的订单。</li>
 <li><b>导出:</b><i>下载报告(HTML)</i>为完整报告——用浏览器打开,选择 打印 → 另存为PDF。<i>下载数据(CSV)</i>可用Excel打开。<i>重置</i>会把所有输入恢复为默认值。</li>
 </ol>
 <h3>计算逻辑</h3>
@@ -409,7 +413,7 @@ zh:{btn:'使用说明',close:'关闭',html:`
 <li>每名工人成本应包含所有需要回收的费用(工资、保险、分摊的间接费用)。</li>
 <li>CM按全部产出计算,未扣除次品和返工。</li>
 <li>天数为工作日。最后一天只按实际使用时间计算成本,因为产线随后转做下一款。</li>
-<li>工具最多计算400天,目标效率上限300%。</li>
+<li>工具最多计算400天。</li>
 </ul>`}
 };
 
@@ -462,9 +466,9 @@ function sim(p,tg){
 }
 function solve(p){
   if(!(p.cap>0)||!(p.cm>0))return null;
-  if(sim(p,300).cum<0)return null;
-  let lo=0,hi=300;
-  for(let i=0;i<40;i++){const m=(lo+hi)/2;sim(p,m).cum>=0?hi=m:lo=m}
+  if(sim(p,1e6).cum<0)return null;
+  let lo=0,hi=100;while(sim(p,hi).cum<0&&hi<1e6)hi*=2;
+  for(let i=0;i<50;i++){const m=(lo+hi)/2;sim(p,m).cum>=0?hi=m:lo=m}
   return Math.ceil(hi*10)/10;
 }
 
@@ -495,7 +499,7 @@ function run(){
   const totCost=R.reduce((a,r)=>a+r.cost,0),minCm=s.done&&p.qty>0?totCost/p.qty:Infinity;last.minCm=minCm;last.totCost=totCost;
   $('verdict').textContent=!s.done?t('vNo'):s.cum>=0?t('vOk')(s.beDay??R.length,usd(s.cum)):(mt?t('vLoss2')(usd(-s.cum),pct(mt),d2(minCm)):t('vLossCm')(usd(-s.cum),d2(minCm)));
   const k=[
-    [mt===null?'>300%':pct(mt),t(mt===null?'kMinNo':'kMin'),false,true],
+    [mt===null?t('imp'):pct(mt),t(mt===null?'kMinNo2':mt>100?'kMinHi':'kMin'),false,true],
     [isFinite(minCm)?d2(minCm)+t('perPc'):'—',t('kCm'),minCm>p.cm+1e-9,mt===null],
     [pct(p.beEff),t('kBe')],
     [num(p.beOut)+t('pcs'),t('kBeOut')],
