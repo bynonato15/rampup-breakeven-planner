@@ -165,6 +165,7 @@ en:{
  nrS:'Not reachable',kMinT:'Min target eff incl. ramp-up',kGap:'CM gap',kRampDays:'Ramp-up days',kRampPL:'Ramp-up period P/L',kBeDay:'Breakeven day',mx:'Max achievable efficiency (%)',sImp:(x,c)=>`LOSS: ramp-up loss can't be recovered. Needs ${x} from day 1 (no ramp-up) or CM ${c}/pc`,sMax:(x,m,c)=>`LOSS: needs ${x}, above max ${m}. Raise CM to ${c}/pc`,sLoss:(x,c)=>`LOSS: raise target to ${x} or CM to ${c}/pc`,sOk:(d,n)=>`OK: breaks even day ${d}, net ${n}`,
  zn:'Slow-down zone (% below target)',sl:'Slow increase per day (%)',
  e1c:l=>`Efficiency on those days at the minimum target: ${l}`,e1n:(m,z,g)=>`This step uses the ramp-up at the minimum target ${m} (slow-down zone starts at ${z}). The day-by-day table below uses your target ${g}, so its cumulative P/L is different.`,
+ kTg:'Target efficiency used',
  sty:'Style No.',xh:'Download report (HTML)',xc:'Download data (CSV)',xOk:'Saved',xNo:'Download cancelled',xNa:"Export isn't available in this view — open the calculator on claude.ai",rGen:'Report generated',rIn:'Inputs',rPdf:'Open in a browser and use Print → Save as PDF to make a PDF.',
  title:'Ramp-up breakeven planner · sewing line',calc:'Calculating…',
  g1:'Order and line',qty:'Order quantity (pcs)',smv:'SMV (min/pc)',wk:'Workers on line',hr:'Working hours/day',
@@ -196,6 +197,7 @@ vi:{
  nrS:'Không đạt được',kMinT:'Hiệu suất mục tiêu tối thiểu (gồm tăng năng suất)',kGap:'Chênh lệch CM',kRampDays:'Số ngày tăng năng suất',kRampPL:'Lãi/lỗ giai đoạn tăng năng suất',kBeDay:'Ngày hòa vốn',mx:'Hiệu suất tối đa có thể đạt (%)',sImp:(x,c)=>`LỖ: không thể bù lỗ giai đoạn tăng năng suất. Cần ${x} ngay từ ngày 1 (không tăng dần) hoặc CM ${c}/sp`,sMax:(x,m,c)=>`LỖ: cần ${x}, vượt mức tối đa ${m}. Tăng CM lên ${c}/sp`,sLoss:(x,c)=>`LỖ: tăng mục tiêu lên ${x} hoặc CM lên ${c}/sp`,sOk:(d,n)=>`ĐẠT: hòa vốn ngày ${d}, lãi ròng ${n}`,
  zn:'Vùng tăng chậm (% dưới mục tiêu)',sl:'Mức tăng chậm mỗi ngày (%)',
  e1c:l=>`Hiệu suất các ngày đó ở mục tiêu tối thiểu: ${l}`,e1n:(m,z,g)=>`Bước này dùng đường tăng năng suất ở mục tiêu tối thiểu ${m} (vùng tăng chậm bắt đầu từ ${z}). Bảng theo ngày bên dưới dùng mục tiêu ${g} của bạn nên lãi/lỗ lũy kế khác.`,
+ kTg:'Hiệu suất mục tiêu áp dụng',
  sty:'Mã hàng (Style No.)',xh:'Tải báo cáo (HTML)',xc:'Tải dữ liệu (CSV)',xOk:'Đã lưu',xNo:'Đã hủy tải',xNa:'Không thể xuất trong chế độ xem này — hãy mở trên claude.ai',rGen:'Ngày tạo báo cáo',rIn:'Thông số đầu vào',rPdf:'Mở bằng trình duyệt và chọn In → Lưu dạng PDF để có file PDF.',
  title:'Kế hoạch tăng năng suất đạt hòa vốn · chuyền may',calc:'Đang tính…',
  g1:'Đơn hàng và chuyền',qty:'Số lượng đơn hàng (sp)',smv:'SMV (phút/sp)',wk:'Số công nhân trên chuyền',hr:'Giờ làm việc/ngày',
@@ -227,6 +229,7 @@ ko:{
  nrS:'달성 불가',kMinT:'최소 목표 효율 (램프업 포함)',kGap:'CM 차이',kRampDays:'램프업 일수',kRampPL:'램프업 기간 손익',kBeDay:'손익분기일',mx:'최대 달성 가능 효율 (%)',sImp:(x,c)=>`손실: 램프업 손실 회수 불가. 1일차부터 ${x} 필요 (램프업 없음) 또는 CM ${c}/pc`,sMax:(x,m,c)=>`손실: ${x} 필요, 최대 ${m} 초과. CM을 ${c}/pc로 인상`,sLoss:(x,c)=>`손실: 목표를 ${x}로 또는 CM을 ${c}/pc로 인상`,sOk:(d,n)=>`정상: ${d}일차 손익분기, 순이익 ${n}`,
  zn:'완만 증가 구간 (목표 대비 %)',sl:'완만 증가율 (%/일)',
  e1c:l=>`최소 목표 기준 해당 일의 효율: ${l}`,e1n:(m,z,g)=>`이 단계는 최소 목표 ${m} 기준 램프업 곡선입니다 (완만 증가 구간 시작 ${z}). 아래 일별 표는 입력한 목표 ${g} 기준이므로 누적 손익이 다릅니다.`,
+ kTg:'적용 목표 효율',
  sty:'스타일 번호',xh:'보고서 다운로드 (HTML)',xc:'데이터 다운로드 (CSV)',xOk:'저장됨',xNo:'다운로드 취소됨',xNa:'이 화면에서는 내보내기를 사용할 수 없습니다 — claude.ai에서 여세요',rGen:'보고서 작성일',rIn:'입력값',rPdf:'브라우저에서 열고 인쇄 → PDF로 저장을 선택하면 PDF가 됩니다.',
  title:'램프업 손익분기 플래너 · 봉제 라인',calc:'계산 중…',
  g1:'오더 및 라인',qty:'오더 수량 (pcs)',smv:'SMV (분/pc)',wk:'라인 작업자 수',hr:'일 근무시간',
@@ -258,6 +261,7 @@ zh:{
  nrS:'无法达到',kMinT:'最低目标效率(含爬坡)',kGap:'CM差额',kRampDays:'爬坡天数',kRampPL:'爬坡期盈亏',kBeDay:'保本日',mx:'最高可达效率(%)',sImp:(x,c)=>`亏损:爬坡期亏损无法收回。需从第1天起达到${x}(无爬坡)或CM ${c}/件`,sMax:(x,m,c)=>`亏损:需要${x},超过上限${m}。请将CM提高到${c}/件`,sLoss:(x,c)=>`亏损:目标提高到${x}或CM提高到${c}/件`,sOk:(d,n)=>`正常:第${d}天保本,净盈利${n}`,
  zn:'减速区间(低于目标的%)',sl:'减速后每日提升(%)',
  e1c:l=>`最低目标下这些天的效率:${l}`,e1n:(m,z,g)=>`此步骤使用最低目标${m}下的爬坡曲线(减速区间从${z}开始)。下方每日表格使用您的目标${g},因此累计盈亏不同。`,
+ kTg:'采用的目标效率',
  sty:'款号',xh:'下载报告(HTML)',xc:'下载数据(CSV)',xOk:'已保存',xNo:'已取消下载',xNa:'此视图无法导出——请在 claude.ai 中打开',rGen:'报告生成时间',rIn:'输入参数',rPdf:'用浏览器打开,选择 打印 → 另存为PDF 即可生成PDF。',
  title:'爬坡期盈亏平衡计划 · 车缝线',calc:'计算中…',
  g1:'订单与产线',qty:'订单数量(件)',smv:'SMV(分钟/件)',wk:'产线工人数',hr:'每日工作小时',
@@ -293,7 +297,7 @@ en:{btn:'User manual',close:'Close',html:`
 <li><b>Enter the order and line:</b> Style No., order quantity, SMV (minutes per piece), workers on the line and working hours per day.</li>
 <li><b>Enter the money inputs:</b> cost per worker and whether it is per day or per month; the hours that cost covers (default 9.5 h); the OT pay rate for hours above that (100% = same rate, 150% = time and a half); and the CM price per piece.</li>
 <li><b>Set the ramp-up curve:</b> day 1 efficiency, how much efficiency rises each day, the <i>slow-down zone</i> and <i>slow increase per day</i>, and the target efficiency the line will hold. Example with target 75%, zone 5% and slow +1%: 30, 38, 46, 54, 62, 70, then 71, 72, 73, 74, 75%. Zone 0% = straight to target. If you know the real curve from a similar style, type the daily efficiencies in <i>Custom</i> (for example 25, 38, 48, 56, 62); after the last value the line stays at the target.</li>
-<li><b>Read the result:</b> the headline says whether the order makes or loses money and on which day it breaks even. The boxes show the minimum target efficiency including ramp-up, the minimum CM and the CM gap, breakeven efficiency and output, ramp-up days and ramp-up period P/L, days to finish (decimal: the last day is counted as a fraction), breakeven day and order net P/L — the same columns as the Excel template. A box turns orange when it is a problem.</li>
+<li><b>Read the result:</b> the headline says whether the order makes or loses money and on which day it breaks even. The boxes show the minimum target efficiency including ramp-up, the target efficiency used, the minimum CM and the CM gap, breakeven efficiency and output, ramp-up days and ramp-up period P/L, days to finish (decimal: the last day is counted as a fraction), breakeven day and order net P/L — the same columns as the Excel template. A box turns orange when it is a problem.</li>
 <li><b>Check the chart and table:</b> orange bars are days below breakeven (loss), blue bars are days above (profit). The line below shows cumulative P/L; where it crosses zero is the breakeven day, also highlighted in the table.</li>
 <li><b>Find what is needed:</b> click <i>Find minimum target</i> to set the target to the lowest efficiency that avoids a loss. If the minimum target is above the <i>Max achievable efficiency</i> you set (default 100%), it shows <i>Not reachable</i>. If no target can recover the ramp-up loss, it shows the efficiency needed from day 1 with no ramp-up, marked <i>Not reachable</i>. In both cases: use the <i>Minimum CM</i> box to negotiate the price, start the line at a higher efficiency, ramp up faster, or plan a larger order.</li>
 <li><b>Export:</b> <i>Download report (HTML)</i> gives a full report — open it in a browser and choose Print → Save as PDF. <i>Download data (CSV)</i> opens in Excel. <i>Reset</i> returns all inputs to the defaults.</li>
@@ -330,7 +334,7 @@ vi:{btn:'Hướng dẫn sử dụng',close:'Đóng',html:`
 <li><b>Nhập thông tin đơn hàng và chuyền:</b> mã hàng, số lượng đơn hàng, SMV (phút/sản phẩm), số công nhân trên chuyền và số giờ làm việc mỗi ngày.</li>
 <li><b>Nhập chi phí:</b> chi phí mỗi công nhân và tính theo ngày hay theo tháng; số giờ mà chi phí đó bao gồm (mặc định 9,5 giờ); hệ số lương tăng ca cho giờ vượt mức đó (100% = như giờ thường, 150% = gấp rưỡi); và giá CM mỗi sản phẩm.</li>
 <li><b>Thiết lập đường cong tăng năng suất:</b> hiệu suất ngày 1, mức tăng mỗi ngày, <i>vùng tăng chậm</i> và <i>mức tăng chậm mỗi ngày</i>, cùng hiệu suất mục tiêu chuyền sẽ giữ. Ví dụ mục tiêu 75%, vùng 5%, tăng chậm +1%: 30, 38, 46, 54, 62, 70, rồi 71, 72, 73, 74, 75%. Vùng 0% = lên thẳng mục tiêu. Nếu biết đường cong thực tế từ mã hàng tương tự, hãy nhập hiệu suất từng ngày vào ô <i>tự nhập</i> (ví dụ 25, 38, 48, 56, 62); sau giá trị cuối, chuyền giữ ở mức mục tiêu.</li>
-<li><b>Đọc kết quả:</b> dòng tiêu đề cho biết đơn hàng lãi hay lỗ và hòa vốn vào ngày nào. Các ô hiển thị hiệu suất mục tiêu tối thiểu (gồm tăng năng suất), CM tối thiểu và chênh lệch CM, hiệu suất và sản lượng hòa vốn, số ngày và lãi/lỗ giai đoạn tăng năng suất, số ngày hoàn thành (số thập phân: ngày cuối tính theo phần đã dùng), ngày hòa vốn và lãi/lỗ ròng — giống các cột trong file Excel. Ô chuyển màu cam khi có vấn đề.</li>
+<li><b>Đọc kết quả:</b> dòng tiêu đề cho biết đơn hàng lãi hay lỗ và hòa vốn vào ngày nào. Các ô hiển thị hiệu suất mục tiêu tối thiểu (gồm tăng năng suất), hiệu suất mục tiêu áp dụng, CM tối thiểu và chênh lệch CM, hiệu suất và sản lượng hòa vốn, số ngày và lãi/lỗ giai đoạn tăng năng suất, số ngày hoàn thành (số thập phân: ngày cuối tính theo phần đã dùng), ngày hòa vốn và lãi/lỗ ròng — giống các cột trong file Excel. Ô chuyển màu cam khi có vấn đề.</li>
 <li><b>Xem biểu đồ và bảng:</b> cột cam là ngày dưới hòa vốn (lỗ), cột xanh là ngày trên hòa vốn (lãi). Đường bên dưới là lãi/lỗ lũy kế; điểm cắt qua 0 là ngày hòa vốn, cũng được tô màu trong bảng.</li>
 <li><b>Tìm mức cần đạt:</b> bấm <i>Tìm mục tiêu tối thiểu</i> để đặt mục tiêu ở hiệu suất thấp nhất không bị lỗ. Nếu mục tiêu tối thiểu vượt <i>Hiệu suất tối đa có thể đạt</i> (mặc định 100%), sẽ hiện <i>Không đạt được</i>. Nếu không mục tiêu nào bù được lỗ, sẽ hiện hiệu suất cần đạt ngay từ ngày 1 (không tăng dần), kèm <i>Không đạt được</i>. Khi đó: hãy dùng ô <i>CM tối thiểu</i> để thương lượng giá, cho chuyền bắt đầu ở hiệu suất cao hơn, tăng nhanh hơn, hoặc làm đơn hàng lớn hơn.</li>
 <li><b>Xuất file:</b> <i>Tải báo cáo (HTML)</i> cho báo cáo đầy đủ — mở bằng trình duyệt và chọn In → Lưu dạng PDF. <i>Tải dữ liệu (CSV)</i> mở được bằng Excel. <i>Đặt lại</i> đưa mọi thông số về mặc định.</li>
@@ -367,7 +371,7 @@ ko:{btn:'사용 설명서',close:'닫기',html:`
 <li><b>오더 및 라인 입력:</b> 스타일 번호, 오더 수량, SMV(개당 분), 라인 작업자 수, 일 근무시간.</li>
 <li><b>비용 입력:</b> 작업자 1인 비용과 일당/월급 기준, 그 비용이 포함하는 시간(기본 9.5시간), 그 시간을 넘는 잔업 수당률(100% = 동일, 150% = 1.5배), 개당 CM 단가.</li>
 <li><b>램프업 곡선 설정:</b> 1일차 효율, 일일 증가율, <i>완만 증가 구간</i>과 <i>완만 증가율</i>, 라인이 유지할 목표 효율. 예: 목표 75%, 구간 5%, 완만 +1%이면 30, 38, 46, 54, 62, 70, 이후 71, 72, 73, 74, 75%. 구간 0% = 바로 목표. 비슷한 스타일의 실제 곡선을 알면 <i>직접 입력</i>란에 일별 효율을 입력하세요(예: 25, 38, 48, 56, 62). 마지막 값 이후에는 목표 효율을 유지합니다.</li>
-<li><b>결과 확인:</b> 제목은 오더가 이익인지 손실인지, 며칠째 손익분기에 도달하는지 알려줍니다. 박스에는 최소 목표 효율(램프업 포함), 최소 CM과 CM 차이, 손익분기 효율과 생산량, 램프업 일수와 램프업 기간 손익, 완료 일수(소수: 마지막 날은 사용 비율로 계산), 손익분기일, 오더 순손익이 Excel 템플릿과 같은 항목으로 표시됩니다. 문제가 있으면 주황색으로 바뀝니다.</li>
+<li><b>결과 확인:</b> 제목은 오더가 이익인지 손실인지, 며칠째 손익분기에 도달하는지 알려줍니다. 박스에는 최소 목표 효율(램프업 포함), 적용 목표 효율, 최소 CM과 CM 차이, 손익분기 효율과 생산량, 램프업 일수와 램프업 기간 손익, 완료 일수(소수: 마지막 날은 사용 비율로 계산), 손익분기일, 오더 순손익이 Excel 템플릿과 같은 항목으로 표시됩니다. 문제가 있으면 주황색으로 바뀝니다.</li>
 <li><b>차트와 표 확인:</b> 주황색 막대는 손익분기 미달일(손실), 파란색 막대는 초과일(이익)입니다. 아래 선은 누적 손익이며 0을 넘는 지점이 손익분기일이고 표에서도 강조됩니다.</li>
 <li><b>필요 수준 찾기:</b> <i>최소 목표 찾기</i>를 누르면 손실이 없는 가장 낮은 효율로 목표가 설정됩니다. 최소 목표가 설정한 <i>최대 달성 가능 효율</i>(기본 100%)을 넘으면 <i>달성 불가</i>로 표시됩니다. 어떤 목표로도 램프업 손실을 회수할 수 없으면 램프업 없이 1일차부터 필요한 효율이 <i>달성 불가</i>와 함께 표시됩니다. 이 경우 <i>최소 CM</i> 박스로 단가를 협상하거나, 더 높은 효율로 시작하거나, 램프업을 빠르게 하거나, 더 큰 오더를 계획하세요.</li>
 <li><b>내보내기:</b> <i>보고서 다운로드 (HTML)</i>는 전체 보고서입니다 — 브라우저에서 열고 인쇄 → PDF로 저장을 선택하세요. <i>데이터 다운로드 (CSV)</i>는 Excel에서 열립니다. <i>초기화</i>는 모든 입력값을 기본값으로 되돌립니다.</li>
@@ -404,7 +408,7 @@ zh:{btn:'使用说明',close:'关闭',html:`
 <li><b>输入订单与产线:</b>款号、订单数量、SMV(每件分钟数)、产线工人数和每日工作小时。</li>
 <li><b>输入成本:</b>每名工人成本及按天或按月计算;该成本对应的工时(默认9.5小时);超出部分的加班工资率(100% = 与正常相同,150% = 1.5倍);以及每件CM单价。</li>
 <li><b>设置爬坡曲线:</b>第1天效率、每日提升幅度、<i>减速区间</i>和<i>减速后每日提升</i>,以及产线保持的目标效率。例如目标75%、区间5%、减速后+1%:30, 38, 46, 54, 62, 70,然后71, 72, 73, 74, 75%。区间0% = 直接到目标。如果有类似款式的实际曲线,可在<i>自定义</i>栏输入每日效率(例如 25, 38, 48, 56, 62);最后一个值之后保持目标效率。</li>
-<li><b>查看结果:</b>标题显示订单盈利还是亏损,以及第几天保本。方框显示最低目标效率(含爬坡)、最低CM和CM差额、保本效率和产量、爬坡天数和爬坡期盈亏、完成天数(小数:最后一天按实际比例计算)、保本日和订单净盈亏——与Excel模板的栏位相同。有问题的方框会变成橙色。</li>
+<li><b>查看结果:</b>标题显示订单盈利还是亏损,以及第几天保本。方框显示最低目标效率(含爬坡)、采用的目标效率、最低CM和CM差额、保本效率和产量、爬坡天数和爬坡期盈亏、完成天数(小数:最后一天按实际比例计算)、保本日和订单净盈亏——与Excel模板的栏位相同。有问题的方框会变成橙色。</li>
 <li><b>查看图表和表格:</b>橙色柱为低于保本的日子(亏损),蓝色柱为高于保本的日子(盈利)。下方曲线为累计盈亏,越过0的点就是保本日,表格中也会高亮显示。</li>
 <li><b>找出所需条件:</b>点击<i>计算最低目标</i>,目标会设为不亏损的最低效率。如果最低目标超过设定的<i>最高可达效率</i>(默认100%),会显示<i>无法达到</i>。如果任何目标都无法收回爬坡期亏损,会显示无爬坡情况下从第1天起所需的效率,并标注<i>无法达到</i>。此时:请用<i>最低CM</i>方框议价、让产线以更高效率起步、加快爬坡或安排更大的订单。</li>
 <li><b>导出:</b><i>下载报告(HTML)</i>为完整报告——用浏览器打开,选择 打印 → 另存为PDF。<i>下载数据(CSV)</i>可用Excel打开。<i>重置</i>会把所有输入恢复为默认值。</li>
@@ -534,6 +538,7 @@ function run(){
   const gap=p.cm-minCm;
   const k=[
     [minTxt,t('kMinT'),mt===null||over,true],
+    [pct(p.tg),t('kTg')],
     [isFinite(minCm)?d2(minCm)+t('perPc'):'—',t('kCm'),minCm>p.cm+1e-9],
     [isFinite(gap)?(gap<0?'−\u2060':'+\u2060')+d2(Math.abs(gap))+t('perPc'):'—',t('kGap'),gap<0],
     [pct(p.beEff),t('kBe')],
