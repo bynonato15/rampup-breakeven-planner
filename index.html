@@ -164,6 +164,7 @@ en:{
  imp:'Not possible',kMinNo2:'Minimum target — order ends during ramp-up',kMinHi:'Minimum target (above 100%, not realistic)',
  nrS:'Not reachable',kMinT:'Min target eff incl. ramp-up',kGap:'CM gap',kRampDays:'Ramp-up days',kRampPL:'Ramp-up period P/L',kBeDay:'Breakeven day',mx:'Max achievable efficiency (%)',sImp:(x,c)=>`LOSS: ramp-up loss can't be recovered. Needs ${x} from day 1 (no ramp-up) or CM ${c}/pc`,sMax:(x,m,c)=>`LOSS: needs ${x}, above max ${m}. Raise CM to ${c}/pc`,sLoss:(x,c)=>`LOSS: raise target to ${x} or CM to ${c}/pc`,sOk:(d,n)=>`OK: breaks even day ${d}, net ${n}`,
  zn:'Slow-down zone (% below target)',sl:'Slow increase per day (%)',
+ e1c:l=>`Efficiency on those days at the minimum target: ${l}`,e1n:(m,z,g)=>`This step uses the ramp-up at the minimum target ${m} (slow-down zone starts at ${z}). The day-by-day table below uses your target ${g}, so its cumulative P/L is different.`,
  sty:'Style No.',xh:'Download report (HTML)',xc:'Download data (CSV)',xOk:'Saved',xNo:'Download cancelled',xNa:"Export isn't available in this view — open the calculator on claude.ai",rGen:'Report generated',rIn:'Inputs',rPdf:'Open in a browser and use Print → Save as PDF to make a PDF.',
  title:'Ramp-up breakeven planner · sewing line',calc:'Calculating…',
  g1:'Order and line',qty:'Order quantity (pcs)',smv:'SMV (min/pc)',wk:'Workers on line',hr:'Working hours/day',
@@ -194,6 +195,7 @@ vi:{
  imp:'Không thể',kMinNo2:'Mục tiêu tối thiểu — đơn hàng kết thúc khi còn tăng năng suất',kMinHi:'Mục tiêu tối thiểu (trên 100%, không thực tế)',
  nrS:'Không đạt được',kMinT:'Hiệu suất mục tiêu tối thiểu (gồm tăng năng suất)',kGap:'Chênh lệch CM',kRampDays:'Số ngày tăng năng suất',kRampPL:'Lãi/lỗ giai đoạn tăng năng suất',kBeDay:'Ngày hòa vốn',mx:'Hiệu suất tối đa có thể đạt (%)',sImp:(x,c)=>`LỖ: không thể bù lỗ giai đoạn tăng năng suất. Cần ${x} ngay từ ngày 1 (không tăng dần) hoặc CM ${c}/sp`,sMax:(x,m,c)=>`LỖ: cần ${x}, vượt mức tối đa ${m}. Tăng CM lên ${c}/sp`,sLoss:(x,c)=>`LỖ: tăng mục tiêu lên ${x} hoặc CM lên ${c}/sp`,sOk:(d,n)=>`ĐẠT: hòa vốn ngày ${d}, lãi ròng ${n}`,
  zn:'Vùng tăng chậm (% dưới mục tiêu)',sl:'Mức tăng chậm mỗi ngày (%)',
+ e1c:l=>`Hiệu suất các ngày đó ở mục tiêu tối thiểu: ${l}`,e1n:(m,z,g)=>`Bước này dùng đường tăng năng suất ở mục tiêu tối thiểu ${m} (vùng tăng chậm bắt đầu từ ${z}). Bảng theo ngày bên dưới dùng mục tiêu ${g} của bạn nên lãi/lỗ lũy kế khác.`,
  sty:'Mã hàng (Style No.)',xh:'Tải báo cáo (HTML)',xc:'Tải dữ liệu (CSV)',xOk:'Đã lưu',xNo:'Đã hủy tải',xNa:'Không thể xuất trong chế độ xem này — hãy mở trên claude.ai',rGen:'Ngày tạo báo cáo',rIn:'Thông số đầu vào',rPdf:'Mở bằng trình duyệt và chọn In → Lưu dạng PDF để có file PDF.',
  title:'Kế hoạch tăng năng suất đạt hòa vốn · chuyền may',calc:'Đang tính…',
  g1:'Đơn hàng và chuyền',qty:'Số lượng đơn hàng (sp)',smv:'SMV (phút/sp)',wk:'Số công nhân trên chuyền',hr:'Giờ làm việc/ngày',
@@ -224,6 +226,7 @@ ko:{
  imp:'불가능',kMinNo2:'최소 목표 — 램프업 중 오더 종료',kMinHi:'최소 목표 (100% 초과, 비현실적)',
  nrS:'달성 불가',kMinT:'최소 목표 효율 (램프업 포함)',kGap:'CM 차이',kRampDays:'램프업 일수',kRampPL:'램프업 기간 손익',kBeDay:'손익분기일',mx:'최대 달성 가능 효율 (%)',sImp:(x,c)=>`손실: 램프업 손실 회수 불가. 1일차부터 ${x} 필요 (램프업 없음) 또는 CM ${c}/pc`,sMax:(x,m,c)=>`손실: ${x} 필요, 최대 ${m} 초과. CM을 ${c}/pc로 인상`,sLoss:(x,c)=>`손실: 목표를 ${x}로 또는 CM을 ${c}/pc로 인상`,sOk:(d,n)=>`정상: ${d}일차 손익분기, 순이익 ${n}`,
  zn:'완만 증가 구간 (목표 대비 %)',sl:'완만 증가율 (%/일)',
+ e1c:l=>`최소 목표 기준 해당 일의 효율: ${l}`,e1n:(m,z,g)=>`이 단계는 최소 목표 ${m} 기준 램프업 곡선입니다 (완만 증가 구간 시작 ${z}). 아래 일별 표는 입력한 목표 ${g} 기준이므로 누적 손익이 다릅니다.`,
  sty:'스타일 번호',xh:'보고서 다운로드 (HTML)',xc:'데이터 다운로드 (CSV)',xOk:'저장됨',xNo:'다운로드 취소됨',xNa:'이 화면에서는 내보내기를 사용할 수 없습니다 — claude.ai에서 여세요',rGen:'보고서 작성일',rIn:'입력값',rPdf:'브라우저에서 열고 인쇄 → PDF로 저장을 선택하면 PDF가 됩니다.',
  title:'램프업 손익분기 플래너 · 봉제 라인',calc:'계산 중…',
  g1:'오더 및 라인',qty:'오더 수량 (pcs)',smv:'SMV (분/pc)',wk:'라인 작업자 수',hr:'일 근무시간',
@@ -254,6 +257,7 @@ zh:{
  imp:'不可能',kMinNo2:'最低目标——订单在爬坡期内结束',kMinHi:'最低目标(超过100%,不现实)',
  nrS:'无法达到',kMinT:'最低目标效率(含爬坡)',kGap:'CM差额',kRampDays:'爬坡天数',kRampPL:'爬坡期盈亏',kBeDay:'保本日',mx:'最高可达效率(%)',sImp:(x,c)=>`亏损:爬坡期亏损无法收回。需从第1天起达到${x}(无爬坡)或CM ${c}/件`,sMax:(x,m,c)=>`亏损:需要${x},超过上限${m}。请将CM提高到${c}/件`,sLoss:(x,c)=>`亏损:目标提高到${x}或CM提高到${c}/件`,sOk:(d,n)=>`正常:第${d}天保本,净盈利${n}`,
  zn:'减速区间(低于目标的%)',sl:'减速后每日提升(%)',
+ e1c:l=>`最低目标下这些天的效率:${l}`,e1n:(m,z,g)=>`此步骤使用最低目标${m}下的爬坡曲线(减速区间从${z}开始)。下方每日表格使用您的目标${g},因此累计盈亏不同。`,
  sty:'款号',xh:'下载报告(HTML)',xc:'下载数据(CSV)',xOk:'已保存',xNo:'已取消下载',xNa:'此视图无法导出——请在 claude.ai 中打开',rGen:'报告生成时间',rIn:'输入参数',rPdf:'用浏览器打开,选择 打印 → 另存为PDF 即可生成PDF。',
  title:'爬坡期盈亏平衡计划 · 车缝线',calc:'计算中…',
  g1:'订单与产线',qty:'订单数量(件)',smv:'SMV(分钟/件)',wk:'产线工人数',hr:'每日工作小时',
@@ -498,14 +502,14 @@ function solve(p){
 
 function explain(p,mt){
   const li=(h,f,c)=>`<li${c?' class="res"':''}><b>${h}</b><span class="f">${f}</span></li>`;
-  const cmLi=()=>{const {minCm,totCost,s}=last;if(!isFinite(minCm))return '';const g=minCm-p.cm;return li(t('cmT'),t('cmF')(s.rows.length,usd(totCost),num(p.qty),d2(minCm))+'<br>'+t('cmGap')(d2(p.cm),d2(Math.abs(g)),g>1e-9),mt===null)};
+  const cmLi=()=>{const {minCm,totCost,s}=last;if(!isFinite(minCm))return '';const g=minCm-p.cm;return li(t('cmT'),t('cmF')(s.fd.toFixed(1),usd(totCost),num(p.qty),d2(minCm))+'<br>'+t('cmGap')(d2(p.cm),d2(Math.abs(g)),g>1e-9),mt===null)};
   if(mt===null)return li(t('notReach'),t('nr1'))+cmLi();
   const s2=sim(p,mt),rr=s2.rows.filter(r=>p.cu.length?r.d<=p.cu.length:r.eff<mt-1e-9);
   const Qr=rr.reduce((a,r)=>a+r.out,0),PLr=rr.reduce((a,r)=>a+r.pl,0),loss=-PLr,Qs=p.qty-Qr,per=loss/Qs,den=p.cm-per,O=p.C/den;
   if(den<=0)return li(t('notReach'),t('nr2'))+cmLi();
   const raw=O*p.smv/p.minDay*100;
   return [
-    li(t('e1t'),rr.length?t('e1')(rr.length,num(Qr),loss>=0,usd(Math.abs(loss))):t('e1none')),
+    li(t('e1t'),(rr.length?t('e1')(rr.length,num(Qr),loss>=0,usd(Math.abs(loss)))+'<br>'+t('e1c')(rr.map(x=>+x.eff.toFixed(1)).join(', ')+'%'):t('e1none'))+(Math.abs(mt-p.tg)>1e-9?`<br><span class="w">${t('e1n')(pct(mt),pct(Math.max(0,mt-p.zn)),pct(p.tg))}</span>`:'')),
     li(t('e2t'),t('e2')(usd(Math.abs(loss)),num(Qs),d2(Math.abs(per)),d2(p.cm),loss>=0?'−':'+',d2(den))),
     li(t('e3t'),t('e3')(usd(p.C),d2(den),num(O))),
     li(t('e4t'),t('e4')(num(O),p.smv,num(p.minDay),pct(raw))+(Math.abs(raw-mt)>=0.05?` → <strong>${pct(mt)}</strong> ${t('round')}`:` → <strong>${pct(mt)}</strong>`),true),
